@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QVAULT — The Quantum-Proof Community Protocol</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #07071a;
+    --deep:    #0d0d2b;
+    --violet:  #6c63ff;
+    --cyan:    #00d4ff;
+    --green:   #00ff9d;
+    --white:   #f0f0ff;
+    --gray:    #7070a0;
+    --border:  rgba(108,99,255,0.25);
+    --glow:    rgba(108,99,255,0.15);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none;
+    width: 12px; height: 12px;
+    background: var(--cyan);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, opacity 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed; top: 0; left: 0; z-index: 9998; pointer-events: none;
+    width: 36px; height: 36px;
+    border: 1px solid var(--violet);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.25s ease, width 0.2s, height 0.2s;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── GRID BG ── */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ── SCANLINE ── */
+  .scanline {
+    position: fixed; top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(transparent, rgba(0,212,255,0.15), transparent);
+    z-index: 2; pointer-events: none;
+    animation: scan 6s linear infinite;
+  }
+  @keyframes scan { 0% { top: -3px; } 100% { top: 100vh; } }
+
+  /* ── LAYOUT ── */
+  main { position: relative; z-index: 3; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 60px;
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    background: rgba(7,7,26,0.7);
+    animation: fadeDown 0.8s ease forwards;
+  }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .nav-logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px; letter-spacing: 6px;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .nav-logo span { color: var(--cyan); }
+  .hex-icon {
+    width: 28px; height: 28px;
+    border: 1.5px solid var(--violet);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: var(--glow);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--cyan);
+    animation: pulse-hex 3s ease infinite;
+  }
+  @keyframes pulse-hex { 0%,100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); } 50% { box-shadow: 0 0 20px 4px rgba(108,99,255,0.3); } }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray); text-decoration: none;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--cyan); transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 10px 24px;
+    border: 1px solid var(--violet);
+    color: var(--violet); background: transparent;
+    cursor: pointer; text-decoration: none;
+    transition: all 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .nav-cta:hover { background: var(--violet); color: var(--white); box-shadow: 0 0 30px rgba(108,99,255,0.5); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 120px 60px 80px;
+    position: relative; text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+  .orb-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(108,99,255,0.2) 0%, transparent 70%);
+    top: -100px; left: 50%; transform: translateX(-50%);
+    animation: orb-drift 8s ease-in-out infinite;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+    bottom: 0; right: -100px;
+    animation: orb-drift 11s ease-in-out infinite reverse;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,255,157,0.08) 0%, transparent 70%);
+    top: 40%; left: -80px;
+    animation: orb-drift 9s ease-in-out infinite 2s;
+  }
+  @keyframes orb-drift { 0%,100% { transform: translateY(0) translateX(-50%); } 50% { transform: translateY(-40px) translateX(-50%); } }
+  .orb-2, .orb-3 { animation: orb-drift2 9s ease-in-out infinite; }
+  @keyframes orb-drift2 { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
+
+  .hero-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--cyan);
+    padding: 6px 16px;
+    border: 1px solid rgba(0,212,255,0.3);
+    background: rgba(0,212,255,0.05);
+    margin-bottom: 32px;
+    display: inline-block;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(56px, 8vw, 110px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin-bottom: 12px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+  .hero-title .q { color: var(--violet); display: inline-block; }
+  .hero-title .v {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--white);
+  }
+  .hero-title .glitch {
+    position: relative; display: inline-block;
+  }
+  .hero-title .glitch::before, .hero-title .glitch::after {
+    content: attr(data-text);
+    position: absolute; top: 0; left: 0;
+    color: var(--violet);
+    animation: glitch 4s infinite;
+  }
+  .hero-title .glitch::before { clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%); animation-delay: 0.5s; color: var(--cyan); }
+  .hero-title .glitch::after { clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%); animation-delay: 1s; color: var(--violet); }
+  @keyframes glitch {
+    0%,90%,100% { transform: translate(0); }
+    92% { transform: translate(-3px, 1px); }
+    94% { transform: translate(3px, -1px); }
+    96% { transform: translate(-2px, 0); }
+  }
+
+  .hero-sub {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(18px, 3vw, 28px);
+    font-weight: 400;
+    color: var(--gray);
+    margin-bottom: 40px;
+    max-width: 600px;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+  .hero-sub em { color: var(--cyan); font-style: normal; }
+
+  .hero-desc {
+    font-size: 16px; line-height: 1.7;
+    color: var(--gray); max-width: 580px;
+    margin: 0 auto 56px;
+    animation: fadeUp 0.8s 0.8s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s 1s ease both;
+  }
+
+  .btn-primary {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 16px 40px;
+    background: var(--violet); color: var(--white);
+    border: none; cursor: pointer; text-decoration: none;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+  }
+  .btn-primary:hover { box-shadow: 0 0 40px rgba(108,99,255,0.6); transform: translateY(-2px); }
+  .btn-primary:hover::before { left: 100%; }
+
+  .btn-secondary {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 16px 40px;
+    background: transparent; color: var(--white);
+    border: 1px solid var(--border); cursor: pointer; text-decoration: none;
+    clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 20px rgba(0,212,255,0.2); }
+
+  .hero-stats {
+    display: flex; gap: 60px; margin-top: 80px; justify-content: center;
+    animation: fadeUp 0.8s 1.2s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 32px; color: var(--white);
+    display: block; margin-bottom: 4px;
+  }
+  .stat-num span { color: var(--cyan); }
+  .stat-label {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray);
+  }
+
+  .hero-ticker {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(108,99,255,0.08);
+    border-top: 1px solid var(--border);
+    overflow: hidden; height: 36px; display: flex; align-items: center;
+  }
+  .ticker-inner {
+    display: flex; gap: 60px;
+    animation: ticker 25s linear infinite;
+    white-space: nowrap;
+  }
+  .ticker-item {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; color: var(--gray);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .ticker-item .up { color: var(--green); }
+  .ticker-item .label { color: var(--violet); }
+  @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── PROBLEM SECTION ── */
+  .section {
+    padding: 120px 60px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--violet); margin-bottom: 16px; display: block;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800; line-height: 1.05;
+    margin-bottom: 24px;
+  }
+  .section-title .accent { color: var(--cyan); }
+  .section-body {
+    font-size: 17px; line-height: 1.8;
+    color: var(--gray); max-width: 640px;
+  }
+
+  /* THREAT BOX */
+  .threat-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+    margin-top: 64px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .threat-card {
+    padding: 40px;
+    background: rgba(13,13,43,0.6);
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .threat-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 0;
+    background: var(--cyan); transition: height 0.4s;
+  }
+  .threat-card:hover { background: rgba(108,99,255,0.08); }
+  .threat-card:hover::before { height: 100%; }
+  .threat-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 48px; color: rgba(108,99,255,0.15);
+    font-weight: bold; margin-bottom: 8px; display: block;
+  }
+  .threat-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--white);
+  }
+  .threat-text { font-size: 14px; line-height: 1.7; color: var(--gray); }
+  .threat-text strong { color: var(--cyan); }
+
+  /* ── SOLUTION ── */
+  .solution-wrap {
+    background: rgba(13,13,43,0.5);
+    border: 1px solid var(--border);
+    padding: 80px 60px;
+    position: relative; overflow: hidden;
+    margin: 80px 0;
+  }
+  .solution-wrap::before {
+    content: 'QVAULT';
+    position: absolute; top: -20px; right: -20px;
+    font-family: 'Syne', sans-serif; font-size: 180px; font-weight: 800;
+    color: rgba(108,99,255,0.03); pointer-events: none;
+    line-height: 1;
+  }
+
+  .layers {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px;
+  }
+  .layer {
+    padding: 36px 28px;
+    border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    background: rgba(7,7,26,0.6);
+  }
+  .layer:hover { transform: translateY(-8px); border-color: var(--violet); }
+  .layer-icon {
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-bottom: 20px;
+    border: 1px solid var(--border);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: var(--glow);
+  }
+  .layer-num {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; color: var(--gray);
+    margin-bottom: 8px; display: block;
+  }
+  .layer-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 700; margin-bottom: 12px;
+  }
+  .layer-text { font-size: 14px; line-height: 1.7; color: var(--gray); }
+  .layer-badge {
+    display: inline-block; margin-top: 16px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 10px; background: rgba(108,99,255,0.1);
+    border: 1px solid rgba(108,99,255,0.3); color: var(--violet);
+  }
+
+  /* ── TOKENOMICS ── */
+  .full-bleed {
+    background: var(--deep);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 120px 60px;
+  }
+  .token-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: start; margin-top: 60px; max-width: 1200px; margin-left: auto; margin-right: auto;
+  }
+  .token-chart {
+    position: relative;
+  }
+  .donut-svg { width: 100%; max-width: 320px; display: block; margin: 0 auto; }
+  .donut-center {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .donut-center .big {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 28px; color: var(--white); display: block;
+  }
+  .donut-center .small {
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray);
+  }
+  .token-legend { display: flex; flex-direction: column; gap: 16px; }
+  .legend-item { display: flex; align-items: center; gap: 14px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .legend-label { font-size: 14px; color: var(--gray); flex: 1; }
+  .legend-pct { font-family: 'Share Tech Mono', monospace; font-size: 16px; color: var(--white); }
+
+  .token-mechanics { max-width: 1200px; margin: 60px auto 0; }
+  .mechanic-row {
+    display: flex; align-items: center; gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .mechanic-row:last-child { border-bottom: none; }
+  .mechanic-icon { font-size: 20px; width: 40px; text-align: center; flex-shrink: 0; }
+  .mechanic-pct {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 24px; color: var(--cyan); width: 60px; flex-shrink: 0;
+  }
+  .mechanic-desc { font-size: 15px; color: var(--gray); }
+  .mechanic-desc strong { color: var(--white); }
+
+  /* ── ROADMAP ── */
+  .roadmap { max-width: 900px; margin: 60px auto 0; position: relative; }
+  .roadmap::before {
+    content: ''; position: absolute; top: 0; bottom: 0; left: 28px;
+    width: 1px; background: linear-gradient(to bottom, var(--violet), var(--cyan), var(--green));
+  }
+  .rm-item { display: flex; gap: 32px; margin-bottom: 48px; position: relative; }
+  .rm-dot {
+    width: 58px; height: 58px; border-radius: 50%; flex-shrink: 0;
+    background: var(--navy); border: 2px solid var(--violet);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace; font-size: 11px; color: var(--violet);
+    position: relative; z-index: 1;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .rm-item:hover .rm-dot { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+  .rm-content { padding-top: 12px; }
+  .rm-phase {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--violet); margin-bottom: 6px;
+  }
+  .rm-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .rm-text { font-size: 14px; line-height: 1.7; color: var(--gray); }
+  .rm-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .rm-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    padding: 4px 10px; border: 1px solid var(--border); color: var(--gray);
+  }
+
+  /* ── COMMUNITY ── */
+  .community-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 60px;
+  }
+  .comm-card {
+    padding: 32px; border: 1px solid var(--border);
+    background: rgba(13,13,43,0.4);
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .comm-card::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    transform: scaleX(0); transition: transform 0.4s;
+  }
+  .comm-card:hover { border-color: rgba(108,99,255,0.5); background: rgba(108,99,255,0.05); }
+  .comm-card:hover::after { transform: scaleX(1); }
+  .comm-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+  .comm-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .comm-text { font-size: 14px; line-height: 1.7; color: var(--gray); }
+
+  /* ── CTA FINAL ── */
+  .cta-section {
+    padding: 140px 60px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(108,99,255,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 80px); font-weight: 800; line-height: 1.0;
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .cta-sub { font-size: 18px; color: var(--gray); margin-bottom: 48px; position: relative; z-index: 1; }
+  .cta-form {
+    display: flex; gap: 0; max-width: 480px; margin: 0 auto;
+    position: relative; z-index: 1;
+  }
+  .cta-input {
+    flex: 1; padding: 16px 20px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    border-right: none; color: var(--white);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .cta-input:focus { border-color: var(--violet); }
+  .cta-input::placeholder { color: var(--gray); }
+  .cta-submit {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 16px 28px; background: var(--violet); color: var(--white);
+    border: none; cursor: pointer;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+    transition: all 0.3s;
+  }
+  .cta-submit:hover { background: #8a84ff; box-shadow: 0 0 30px rgba(108,99,255,0.5); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 3;
+  }
+  .footer-logo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px; letter-spacing: 4px; color: var(--gray);
+  }
+  .footer-logo span { color: var(--cyan); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gray); text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy {
+    font-size: 12px; color: var(--gray);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── TERMINAL BLINK ── */
+  .blink { animation: blink 1s step-end infinite; }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 80px; }
+    .section { padding: 80px 24px; }
+    .full-bleed { padding: 80px 24px; }
+    .threat-grid { grid-template-columns: 1fr; }
+    .layers { grid-template-columns: 1fr; }
+    .token-grid { grid-template-columns: 1fr; }
+    .community-grid { grid-template-columns: 1fr; }
+    .hero-stats { gap: 32px; flex-wrap: wrap; }
+    footer { flex-direction: column; gap: 24px; text-align: center; }
+    .cta-section { padding: 80px 24px; }
+    .cta-form { flex-direction: column; }
+    .cta-input { border-right: 1px solid var(--border); border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="scanline"></div>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="hex-icon">⬡</div>
+    Q<span>VAULT</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#problem">Threat</a></li>
+    <li><a href="#solution">Protocol</a></li>
+    <li><a href="#tokenomics">$QVLT</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#community">Community</a></li>
+  </ul>
+  <a class="nav-cta" href="#join">Join Whitelist</a>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+    <div class="hero-orb orb-3"></div>
+
+    <div class="hero-tag">⬡ Quantum-Proof Community Protocol — $QVLT on Solana</div>
+
+    <h1 class="hero-title">
+      <span class="q">Q</span><span class="glitch" data-text="VAULT">VAULT</span>
+    </h1>
+
+    <p class="hero-sub">
+      The future of crypto is <em>quantum-safe</em>.<br>Be the first to own it.
+    </p>
+
+    <p class="hero-desc">
+      QVAULT is a community-first DeFi protocol built around the most powerful narrative in 2026: protecting the $2.8T crypto ecosystem from the quantum computing threat — with real utility, real governance, and a roadmap to our own quantum-resistant blockchain.
+    </p>
+
+    <div class="hero-btns">
+      <a class="btn-primary" href="#join">Join the Movement</a>
+      <a class="btn-secondary" href="#">Read Whitepaper</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">1B <span>$QVLT</span></span>
+        <span class="stat-label">Total Supply</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">40<span>%</span></span>
+        <span class="stat-label">Fair Launch</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Protocol Layers</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num"><span>∞</span></span>
+        <span class="stat-label">Quantum Shield</span>
+      </div>
+    </div>
+
+    <div class="hero-ticker">
+      <div class="ticker-inner">
+        <div class="ticker-item"><span class="label">$QVLT</span> FAIR LAUNCH — Q3 2026 <span class="up">▲ INCOMING</span></div>
+        <div class="ticker-item"><span class="label">THREAT</span> 6.9M BTC exposed to quantum attacks <span class="up">⚠ VERIFIED</span></div>
+        <div class="ticker-item"><span class="label">NIST</span> Post-quantum standards finalized 2024 <span class="up">✓ ACTIVE</span></div>
+        <div class="ticker-item"><span class="label">STAKING</span> Up to 30% APY for Qubit holders <span class="up">▲ LIVE Q3</span></div>
+        <div class="ticker-item"><span class="label">$QVLT</span> FAIR LAUNCH — Q3 2026 <span class="up">▲ INCOMING</span></div>
+        <div class="ticker-item"><span class="label">THREAT</span> 6.9M BTC exposed to quantum attacks <span class="up">⚠ VERIFIED</span></div>
+        <div class="ticker-item"><span class="label">NIST</span> Post-quantum standards finalized 2024 <span class="up">✓ ACTIVE</span></div>
+        <div class="ticker-item"><span class="label">STAKING</span> Up to 30% APY for Qubit holders <span class="up">▲ LIVE Q3</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section" id="problem">
+    <span class="section-tag reveal">// 01 — The Threat</span>
+    <h2 class="section-title reveal">The quantum clock<br>is <span class="accent">ticking</span>.</h2>
+    <p class="section-body reveal">Google's March 2026 research showed that breaking Bitcoin's encryption requires 20× fewer quantum resources than estimated. The $2.8T crypto ecosystem is running on borrowed time — and almost no one is prepared.</p>
+
+    <div class="threat-grid reveal">
+      <div class="threat-card">
+        <span class="threat-num">01</span>
+        <div class="threat-title">ECDSA is Vulnerable</div>
+        <p class="threat-text">Every major blockchain — Bitcoin, Ethereum, Solana — uses Elliptic Curve cryptography. Quantum computers running Shor's algorithm can crack these keys. A future quantum machine could break a Bitcoin private key in <strong>~9 minutes</strong>.</p>
+      </div>
+      <div class="threat-card">
+        <span class="threat-num">02</span>
+        <div class="threat-title">6.9M BTC at Risk</div>
+        <p class="threat-text">Approximately <strong>33% of all Bitcoin supply</strong> sits in addresses with exposed public keys — directly vulnerable once quantum computers reach sufficient power. The race to migrate has already begun.</p>
+      </div>
+      <div class="threat-card">
+        <span class="threat-num">03</span>
+        <div class="threat-title">No Unified Community</div>
+        <p class="threat-text">Quantum-resistant projects exist but lack <strong>community, culture, and DeFi utility</strong>. The narrative is powerful — but it has no home. No tribe. No movement. Until now.</p>
+      </div>
+      <div class="threat-card">
+        <span class="threat-num">04</span>
+        <div class="threat-title">The Window is Closing</div>
+        <p class="threat-text">NIST finalized post-quantum standards in 2024. Governments mandate quantum-resistance by 2035. <strong>The builders who move now will define the next era</strong> of blockchain security.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTION -->
+  <section class="section" id="solution" style="padding-top:0;">
+    <div class="solution-wrap reveal">
+      <span class="section-tag">// 02 — The Protocol</span>
+      <h2 class="section-title">Three layers.<br>One <span class="accent">movement.</span></h2>
+      <p class="section-body">QVAULT is not just a token. It is a three-layer protocol designed to grow with the quantum threat — and reward those who lead the charge.</p>
+
+      <div class="layers">
+        <div class="layer">
+          <div class="layer-icon">🌐</div>
+          <span class="layer-num">// LAYER 01</span>
+          <div class="layer-title">Community & Governance</div>
+          <p class="layer-text">A globally distributed DAO of holders who govern the protocol, fund development, and drive the quantum-security narrative across Web3.</p>
+          <span class="layer-badge">DAO Governance</span>
+        </div>
+        <div class="layer">
+          <div class="layer-icon">⚡</div>
+          <span class="layer-num">// LAYER 02</span>
+          <div class="layer-title">DeFi Utility</div>
+          <p class="layer-text">Staking with up to 30% APY, fee-sharing for all holders, buyback-and-burn mechanics, and liquidity mining — real value, real yield.</p>
+          <span class="layer-badge">Tokenomics 2.0</span>
+        </div>
+        <div class="layer">
+          <div class="layer-icon">🔐</div>
+          <span class="layer-num">// LAYER 03</span>
+          <div class="layer-title">Quantum-Resistant L1</div>
+          <p class="layer-text">The long-game: a proprietary Layer 1 blockchain built with NIST-approved CRYSTALS-Dilithium signatures. Governed by the QVAULT DAO. Secured for the quantum era.</p>
+          <span class="layer-badge">2027–2028</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOKENOMICS -->
+  <div class="full-bleed" id="tokenomics">
+    <div style="max-width:1200px; margin:0 auto;">
+      <span class="section-tag reveal">// 03 — $QVLT Tokenomics</span>
+      <h2 class="section-title reveal">Designed for<br><span class="accent">holders</span>, not flippers.</h2>
+
+      <div class="token-grid reveal">
+        <div class="token-chart">
+          <svg class="donut-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Donut segments (1B total) -->
+            <!-- Fair Launch 40% → 144deg -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#6c63ff" stroke-width="22"
+              stroke-dasharray="175.9 263.9" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+            <!-- Community 25% → 90deg -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#00d4ff" stroke-width="22"
+              stroke-dasharray="109.96 329.9" stroke-dashoffset="-175.9" transform="rotate(-90 100 100)"/>
+            <!-- Treasury 15% -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#00ff9d" stroke-width="22"
+              stroke-dasharray="65.97 373.9" stroke-dashoffset="-285.9" transform="rotate(-90 100 100)"/>
+            <!-- Team 10% -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#ff6b9d" stroke-width="22"
+              stroke-dasharray="43.98 395.9" stroke-dashoffset="-351.9" transform="rotate(-90 100 100)"/>
+            <!-- Liquidity 7% -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#ffd700" stroke-width="22"
+              stroke-dasharray="30.79 409.1" stroke-dashoffset="-395.9" transform="rotate(-90 100 100)"/>
+            <!-- Partners 3% -->
+            <circle cx="100" cy="100" r="70" fill="none" stroke="#ff8c42" stroke-width="22"
+              stroke-dasharray="13.2 426.7" stroke-dashoffset="-426.7" transform="rotate(-90 100 100)"/>
+            <circle cx="100" cy="100" r="58" fill="#07071a"/>
+          </svg>
+          <div class="donut-center">
+            <span class="big">1B</span>
+            <span class="small">$QVLT</span>
+          </div>
+        </div>
+
+        <div class="token-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#6c63ff"></div><span class="legend-label">Fair Launch</span><span class="legend-pct">40%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#00d4ff"></div><span class="legend-label">Community & Ecosystem</span><span class="legend-pct">25%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#00ff9d"></div><span class="legend-label">DAO Treasury</span><span class="legend-pct">15%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff6b9d"></div><span class="legend-label">Team & Advisors</span><span class="legend-pct">10%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ffd700"></div><span class="legend-label">Liquidity Provision</span><span class="legend-pct">7%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#ff8c42"></div><span class="legend-label">Strategic Partners</span><span class="legend-pct">3%</span></div>
+        </div>
+      </div>
+
+      <div class="token-mechanics reveal">
+        <h3 style="font-family:'Syne',sans-serif; font-size:22px; font-weight:700; margin-bottom:8px; color:var(--white);">Fee Distribution</h3>
+        <p style="font-size:14px; color:var(--gray); margin-bottom:24px;">Every dollar generated by the protocol flows back to the ecosystem.</p>
+        <div class="mechanic-row"><span class="mechanic-icon">💎</span><span class="mechanic-pct">40%</span><span class="mechanic-desc"><strong>Staker rewards</strong> — weekly distributions to all $QVLT stakers</span></div>
+        <div class="mechanic-row"><span class="mechanic-icon">🔥</span><span class="mechanic-pct">20%</span><span class="mechanic-desc"><strong>Buyback & burn</strong> — permanent supply reduction, deflationary by design</span></div>
+        <div class="mechanic-row"><span class="mechanic-icon">🏛️</span><span class="mechanic-pct">25%</span><span class="mechanic-desc"><strong>DAO treasury</strong> — funds development, grants, and ecosystem expansion</span></div>
+        <div class="mechanic-row"><span class="mechanic-icon">📢</span><span class="mechanic-pct">15%</span><span class="mechanic-desc"><strong>Growth & marketing</strong> — community expansion and strategic partnerships</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <section class="section" id="roadmap">
+    <span class="section-tag reveal">// 04 — Roadmap</span>
+    <h2 class="section-title reveal">From launch to<br><span class="accent">sovereignty</span>.</h2>
+
+    <div class="roadmap reveal">
+      <div class="rm-item">
+        <div class="rm-dot">Q3<br>2026</div>
+        <div class="rm-content">
+          <div class="rm-phase">// Phase 1 — Launch</div>
+          <div class="rm-title">Fair Launch & Community Genesis</div>
+          <p class="rm-text">Fair launch on Solana via Raydium. Staking platform live. QVAULT community ignition across Discord, Telegram and X. First DAO governance vote. Quantum Security Awareness Campaign begins.</p>
+          <div class="rm-tags">
+            <span class="rm-tag">$QVLT Launch</span>
+            <span class="rm-tag">Staking Live</span>
+            <span class="rm-tag">DAO Genesis</span>
+            <span class="rm-tag">Electron + Photon Tiers</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-item">
+        <div class="rm-dot" style="border-color:var(--cyan); color:var(--cyan);">Q4<br>2026</div>
+        <div class="rm-content">
+          <div class="rm-phase" style="color:var(--cyan);">// Phase 2 — DeFi Expansion</div>
+          <div class="rm-title">Security Suite & CEX Listings</div>
+          <p class="rm-text">QVAULT Security Suite v1.0 — open-source quantum vulnerability toolkit for Web3. CEX listings (Tier 2). Grants program launch. Qubit tier activation. Strategic research partnerships.</p>
+          <div class="rm-tags">
+            <span class="rm-tag" style="border-color:rgba(0,212,255,0.3); color:var(--cyan);">Security Suite</span>
+            <span class="rm-tag" style="border-color:rgba(0,212,255,0.3); color:var(--cyan);">CEX Listings</span>
+            <span class="rm-tag" style="border-color:rgba(0,212,255,0.3); color:var(--cyan);">Grants Program</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rm-item">
+        <div class="rm-dot" style="border-color:var(--green); color:var(--green);">2027<br>–28</div>
+        <div class="rm-content">
+          <div class="rm-phase" style="color:var(--green);">// Phase 3 — Sovereign Chain</div>
+          <div class="rm-title">QVAULT L1 — Quantum-Native Blockchain</div>
+          <p class="rm-text">Proprietary Layer 1 blockchain with CRYSTALS-Dilithium signatures from genesis. EVM-compatible. $QVLT migration bridge from Solana. Mainnet governed by DAO. Open to third-party dApps.</p>
+          <div class="rm-tags">
+            <span class="rm-tag" style="border-color:rgba(0,255,157,0.3); color:var(--green);">L1 Testnet</span>
+            <span class="rm-tag" style="border-color:rgba(0,255,157,0.3); color:var(--green);">Dilithium Signatures</span>
+            <span class="rm-tag" style="border-color:rgba(0,255,157,0.3); color:var(--green);">Mainnet Launch</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMMUNITY -->
+  <div class="full-bleed" id="community">
+    <div style="max-width:1200px; margin:0 auto;">
+      <span class="section-tag reveal">// 05 — Community</span>
+      <h2 class="section-title reveal">Not a project.<br>A <span class="accent">movement.</span></h2>
+      <p class="section-body reveal">QVAULT is built community-first. Every mechanic, every decision, every line of code exists to serve the people who believe in the quantum-safe future.</p>
+
+      <div class="community-grid reveal">
+        <div class="comm-card">
+          <span class="comm-icon">🎖️</span>
+          <div class="comm-title">Ambassador Program</div>
+          <p class="comm-text">Token rewards for community leaders who grow the QVAULT movement. Real incentives for real builders — not bots.</p>
+        </div>
+        <div class="comm-card">
+          <span class="comm-icon">📚</span>
+          <div class="comm-title">QVAULT Academy</div>
+          <p class="comm-text">Free educational content on quantum cryptography and crypto security. Informed holders become evangelists. Evangelists build movements.</p>
+        </div>
+        <div class="comm-card">
+          <span class="comm-icon">🏛️</span>
+          <div class="comm-title">DAO Governance</div>
+          <p class="comm-text">$QVLT holders vote on every major protocol decision. This is your protocol — not the team's. Real power to real people.</p>
+        </div>
+        <div class="comm-card">
+          <span class="comm-icon">📡</span>
+          <div class="comm-title">Weekly Security Briefings</div>
+          <p class="comm-text">Accessible summaries of the latest quantum computing and crypto security developments. Stay ahead of the curve.</p>
+        </div>
+        <div class="comm-card">
+          <span class="comm-icon">🔗</span>
+          <div class="comm-title">Referral Rewards</div>
+          <p class="comm-text">Bring verified new members to the QVAULT community and earn $QVLT rewards. Growth that compounds naturally.</p>
+        </div>
+        <div class="comm-card">
+          <span class="comm-icon">🎙️</span>
+          <div class="comm-title">Monthly X Spaces</div>
+          <p class="comm-text">Live sessions with quantum computing researchers and crypto security experts. Access to the minds shaping the quantum era.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section" id="join">
+    <h2 class="cta-title reveal">
+      The quantum era<br>is <span style="color:var(--cyan)">coming</span>.<br>
+      <span style="color:var(--violet)">Are you ready?</span>
+    </h2>
+    <p class="cta-sub reveal">Join the whitelist. Be among the first to own $QVLT.<br>The vault opens Q3 2026.</p>
+    <div class="cta-form reveal">
+      <input class="cta-input" type="email" placeholder="your@email.com">
+      <button class="cta-submit">Secure Spot</button>
+    </div>
+    <p style="margin-top:16px; font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--gray); position:relative; z-index:1;">
+      <span class="blink">▮</span> 0 spots claimed so far. Fair launch. No VCs. No presale.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-logo">Q<span>VAULT</span> PROTOCOL</div>
+  <div class="footer-links">
+    <a href="#">Whitepaper</a>
+    <a href="#">Discord</a>
+    <a href="#">Twitter / X</a>
+    <a href="#">GitHub</a>
+    <a href="#">Audit</a>
+  </div>
+  <div class="footer-copy">© 2026 QVAULT. Not financial advice.</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    setTimeout(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    }, 80);
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Counter animation
+  const counters = document.querySelectorAll('.stat-num');
+
+  // Whitelist counter (simulate)
+  let count = 0;
+  const target = Math.floor(Math.random() * 800) + 200;
+  const counterEl = document.querySelector('.cta-section p span.blink');
+  if (counterEl) {
+    const parentP = counterEl.parentElement;
+    let cur = 0;
+    const interval = setInterval(() => {
+      cur += Math.ceil(target / 60);
+      if (cur >= target) { cur = target; clearInterval(interval); }
+      parentP.innerHTML = `<span class="blink">▮</span> ${cur.toLocaleString()} spots claimed. Fair launch. No VCs. No presale.`;
+    }, 40);
+  }
+
+  // Glitch effect on hover for logo
+  const logo = document.querySelector('.nav-logo');
+  logo.addEventListener('mouseenter', () => {
+    logo.style.letterSpacing = '8px';
+    setTimeout(() => logo.style.letterSpacing = '6px', 150);
+  });
+</script>
+</body>
+</html>

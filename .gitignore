@@ -1,0 +1,47 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+**/id.json
+**/devnet.json
+**/mainnet.json
+wallet*.json
+
+# Rust / Anchor
+contracts/target/
+contracts/.anchor/
+**/*.rs.bk
+# Cargo.lock IS committed on purpose: it pins dependency versions that are
+# required for the IDL/contract to build (icu, time, proc-macro2, etc.).
+
+# Node
+node_modules/
+.next/
+out/
+dist/
+build/
+*.tsbuildinfo
+.npm/
+.pnp.*
+
+# Solana
+test-ledger/
+.anchor/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Misc
+.cache/
+coverage/

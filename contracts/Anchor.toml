@@ -1,0 +1,19 @@
+[features]
+seeds = false
+skip-lint = false
+
+[programs.localnet]
+qvault = "BLTxBWAv3JwewqX8U3TuNBPuTBUyaCd8DSQP1DVGhQiY"
+
+[programs.devnet]
+qvault = "BLTxBWAv3JwewqX8U3TuNBPuTBUyaCd8DSQP1DVGhQiY"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"

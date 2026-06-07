@@ -1,0 +1,38 @@
+name: QVAULT social bot
+
+# Posts the next due item from social/content/queue.json once a day.
+# Requires repo Secrets: X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET.
+on:
+  schedule:
+    - cron: "0 15 * * *" # 15:00 UTC daily
+  workflow_dispatch: {} # allow manual "Run workflow"
+
+permissions:
+  contents: write # to commit the updated queue back
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install deps
+        working-directory: social
+        run: npm install --no-audit --no-fund
+      - name: Post next item
+        working-directory: social
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: npm run post
+      - name: Persist queue state
+        run: |
+          git config user.name "qvault-bot"
+          git config user.email "bot@qvault.es"
+          git add social/content/queue.json
+          git commit -m "social: mark posted [skip ci]" || echo "no changes"
+          git push || echo "nothing to push"

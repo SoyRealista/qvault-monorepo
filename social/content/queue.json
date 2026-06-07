@@ -1,0 +1,49 @@
+[
+  {
+    "id": "intro-thread",
+    "thread": [
+      "Most of crypto is built on cryptography that quantum computers may one day break. The research keeps moving in one direction: the bar to break it keeps dropping. 🧵 Meet QVAULT ($QVLT) — the community building for a quantum-safe future. 1/",
+      "The threat isn't sci-fi. Researchers (incl. Google's Quantum AI) have been *lowering* the estimated resources needed to break today's public-key crypto. No machine does it yet — but the window to prepare is finite. 2/",
+      "QVAULT is 3 layers: 🧬 a community that gets it, 💸 real DeFi utility (staking, fee-sharing, buyback & burn), and 🛡️ a roadmap to a post-quantum Layer 1. Built on Solana for speed + low fees. 3/",
+      "We're community-first: not a project that happens to have a community, but a community that happens to have a protocol. Come build the quantum-safe movement with us. ⬡ $QVLT 4/4"
+    ],
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "hook-quantum",
+    "text": "Your keys are protected by math a quantum computer could one day solve. The estimates for \"one day\" keep getting shorter. Not panic — preparation. That's why QVAULT exists. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "staking",
+    "text": "Stake $QVLT, earn rewards, get a say. 3 tiers:\n⚡ Electron — 10k\n🔆 Photon — 50k\n🧊 Qubit — 250k (DAO council seat)\nFee-sharing + governance baked in. Tokenomics 2.0. ⬡",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "buyback-burn",
+    "text": "Every bit of protocol usage works for holders: 40% of fees → stakers, 20% → buyback & burn 🔥, 25% → DAO, 15% → growth. Usage up → supply pressure down. $QVLT ⬡",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "why-solana",
+    "text": "Why launch on Solana? Sub-cent fees + speed. A community token built around frequent staking only works where transactions are nearly free. The quantum-safe L1 comes later — phase 3. $QVLT ⬡",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "education-cta",
+    "text": "The quantum threat is real but misunderstood. We're building QVAULT Academy: free, plain-language post-quantum education. Informed holders > hype. Follow along and learn with us. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "community-cta",
+    "text": "Early is a feeling. If \"quantum-safe finance is inevitable\" sounds right to you, you're our people. Drop a ⬡ and join the QVAULT community. $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  }
+]

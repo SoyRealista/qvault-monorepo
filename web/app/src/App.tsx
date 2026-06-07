@@ -68,6 +68,11 @@ export default function App() {
       try {
         stake = await (program.account as any).stakeAccount.fetch(stakeAccPda);
       } catch {}
+      const vestingPda = seed("vesting", publicKey.toBuffer());
+      let vesting: any = null;
+      try {
+        vesting = await (program.account as any).vestingSchedule.fetch(vestingPda);
+      } catch {}
       setS({
         mint,
         ata,
@@ -76,6 +81,8 @@ export default function App() {
         treasury,
         balance,
         stake,
+        vestingPda,
+        vesting,
         totalStaked: fromRaw(cfg.totalStaked),
         totalBurned: fromRaw(cfg.totalBurned),
         paused: cfg.paused,
@@ -152,6 +159,21 @@ export default function App() {
         .rpc()
     );
 
+  const claimVested = () =>
+    run("Reclamar vesting", () =>
+      program!.methods
+        .claimVested()
+        .accountsPartial({
+          beneficiary: publicKey!,
+          config,
+          vesting: s.vestingPda,
+          treasuryVault: s.treasury,
+          beneficiaryTokenAccount: s.ata,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        })
+        .rpc()
+    );
+
   const buyUrl = s
     ? `https://raydium.io/swap/?outputMint=${s.mint.toBase58()}&inputMint=sol`
     : "https://raydium.io/swap/";
@@ -166,7 +188,7 @@ export default function App() {
     <div className="wrap">
       <header>
         <div className="brand">
-          <img src="/qvlt-logo.svg" width={40} height={40} alt="QVAULT" />
+          <img src={`${import.meta.env.BASE_URL}qvlt-logo.svg`} width={40} height={40} alt="QVAULT" />
           <div>
             <h1>QVAULT</h1>
             <span className="sub">$QVLT · Solana devnet</span>
@@ -217,6 +239,19 @@ export default function App() {
             <p className="muted">Adquiere $QVLT en el pool de Raydium.</p>
             <a className="btn primary" href={buyUrl} target="_blank" rel="noreferrer">Comprar en Raydium ↗</a>
           </div>
+
+          {s?.vesting && (
+            <div className="card">
+              <h3>Vesting</h3>
+              <div className="grid" style={{ marginBottom: 12 }}>
+                <div className="stat"><span>Total</span><b>{fmt(fromRaw(s.vesting.totalAmount))}</b></div>
+                <div className="stat"><span>Liberado</span><b>{fmt(fromRaw(s.vesting.releasedAmount))}</b></div>
+                <div className="stat"><span>Cliff</span><b>{new Date(Number(s.vesting.cliffTs) * 1000).toLocaleDateString()}</b></div>
+                <div className="stat"><span>Fin</span><b>{new Date(Number(s.vesting.endTs) * 1000).toLocaleDateString()}</b></div>
+              </div>
+              <button className="btn primary" disabled={busy} onClick={claimVested}>Reclamar lo liberado</button>
+            </div>
+          )}
         </>
       )}
 

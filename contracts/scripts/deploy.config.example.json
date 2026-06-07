@@ -1,0 +1,30 @@
+{
+  "_comment": "Copy to deploy.config.json and fill in real wallet addresses before running. Amounts are in whole QVLT (the script adds 9 decimals). Months are 30-day periods.",
+  "vesting": [
+    {
+      "label": "Team & Advisors (10% — 12mo cliff + 24mo)",
+      "beneficiary": "REPLACE_WITH_TEAM_WALLET_PUBKEY",
+      "amount": 100000000,
+      "cliffMonths": 12,
+      "durationMonths": 36
+    },
+    {
+      "label": "Community & Ecosystem (25% — 36mo linear, no cliff)",
+      "beneficiary": "REPLACE_WITH_COMMUNITY_WALLET_PUBKEY",
+      "amount": 250000000,
+      "cliffMonths": 0,
+      "durationMonths": 36
+    },
+    {
+      "label": "Strategic Partners (3% — 6mo cliff + 18mo)",
+      "beneficiary": "REPLACE_WITH_PARTNERS_WALLET_PUBKEY",
+      "amount": 30000000,
+      "cliffMonths": 6,
+      "durationMonths": 24
+    }
+  ],
+  "notes": [
+    "Fair Launch (40% / 400M) and Liquidity (7% / 70M) stay in the treasury and are moved at launch via withdraw_treasury (to seed & lock the Raydium pool).",
+    "DAO Treasury (15% / 150M) stays under treasury/DAO control."
+  ]
+}

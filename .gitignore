@@ -8,6 +8,8 @@
 **/devnet.json
 **/mainnet.json
 wallet*.json
+mint-keypair-*.json
+contracts/scripts/deploy.config.json
 
 # Rust / Anchor
 contracts/target/

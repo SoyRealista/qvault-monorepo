@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "flow": "ts-node tests/flow.ts"
+    "flow": "ts-node tests/flow.ts",
+    "test": "ts-mocha -p ./tsconfig.json -t 1000000 tests/qvault.test.ts"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.1",
@@ -11,7 +12,12 @@
     "@solana/web3.js": "^1.95.4"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
     "@types/node": "^20.0.0",
+    "chai": "^4.4.1",
+    "mocha": "^10.4.0",
+    "ts-mocha": "^10.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.0"
   }

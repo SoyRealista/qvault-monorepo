@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QVAULT logo">
+  <defs>
+    <linearGradient id="g" x1="96" y1="96" x2="416" y2="416" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6C63FF"/>
+      <stop offset="0.55" stop-color="#00D4FF"/>
+      <stop offset="1" stop-color="#00FF9D"/>
+    </linearGradient>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0" stop-color="#0E0E2A"/>
+      <stop offset="1" stop-color="#07071A"/>
+    </radialGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+
+  <!-- outer hex vault -->
+  <path d="M256 84 L404 170 L404 342 L256 428 L108 342 L108 170 Z"
+        fill="none" stroke="url(#g)" stroke-width="16" stroke-linejoin="round"/>
+
+  <!-- inner hex -->
+  <path d="M256 150 L347 202 L347 310 L256 362 L165 310 L165 202 Z"
+        fill="none" stroke="url(#g)" stroke-width="8" stroke-linejoin="round" opacity="0.55"/>
+
+  <!-- central node + orbit (quantum motif) -->
+  <circle cx="256" cy="256" r="26" fill="url(#g)"/>
+  <ellipse cx="256" cy="256" rx="92" ry="38" fill="none" stroke="#00D4FF" stroke-width="5" opacity="0.7" transform="rotate(28 256 256)"/>
+  <ellipse cx="256" cy="256" rx="92" ry="38" fill="none" stroke="#00FF9D" stroke-width="5" opacity="0.7" transform="rotate(-28 256 256)"/>
+
+  <!-- wordmark -->
+  <text x="256" y="476" text-anchor="middle" font-family="'Share Tech Mono', ui-monospace, monospace"
+        font-size="46" letter-spacing="10" fill="#FFFFFF">QVLT</text>
+</svg>

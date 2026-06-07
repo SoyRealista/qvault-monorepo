@@ -1,0 +1,22 @@
+{
+  "name": "QVAULT",
+  "symbol": "QVLT",
+  "description": "QVAULT ($QVLT) is a community-first, quantum-aware crypto protocol on Solana, combining quantum-resistant security narrative, DeFi utility (staking, fee-sharing, buyback-and-burn) and community governance. Launching on Solana, with a long-term roadmap to a proprietary post-quantum Layer 1.",
+  "image": "https://qvault.es/qvlt-logo.png",
+  "external_url": "https://qvault.es",
+  "decimals": 9,
+  "tags": ["defi", "staking", "governance", "quantum", "community"],
+  "properties": {
+    "category": "image",
+    "files": [
+      { "uri": "https://qvault.es/qvlt-logo.png", "type": "image/png" },
+      { "uri": "https://qvault.es/qvlt-logo.svg", "type": "image/svg+xml" }
+    ]
+  },
+  "extensions": {
+    "website": "https://qvault.es",
+    "twitter": "https://x.com/qvault",
+    "telegram": "https://t.me/qvault",
+    "discord": "https://discord.gg/qvault"
+  }
+}

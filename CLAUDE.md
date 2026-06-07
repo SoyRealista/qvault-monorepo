@@ -59,7 +59,7 @@ qvault-monorepo/
 
 ## Current State (what exists)
 
-- ✅ **Smart contract** — full Anchor program in `contracts/src/lib.rs` (12 instructions: init, stake, unstake, claim, distribute_fees, burn, governance). NOT audited.
+- ✅ **Smart contract** — full Anchor program in `contracts/programs/qvault/src/lib.rs` (16 instructions: init, stake, unstake, claim, distribute_fees, buyback_burn, governance, two-step admin, **withdraw_treasury**, **create_vesting/claim_vested**). Builds with IDL, deployed to devnet. Internal review done (see `AUDIT.md`); NOT professionally audited.
 - ✅ **Landing page** — static HTML in `web/public/index.html` (dark cyberpunk design)
 - ✅ **Whitepaper, pitch deck, tokenomics model, community playbook** — in `docs/`
 - ❌ **dApp** — not built yet (staking UI, governance UI, wallet connect)

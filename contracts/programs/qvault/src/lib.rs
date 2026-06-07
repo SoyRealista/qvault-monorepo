@@ -57,11 +57,19 @@ pub const MIN_VOTE_QUBIT:   u64 = TIER_QUBIT;
 pub const PROPOSAL_DURATION: i64 = 7 * 24 * 3600; // 7 days in seconds
 pub const MAX_PROPOSALS:    usize = 64;
 
+// Governance limits
+pub const MAX_TITLE_LEN:       usize = 128;
+pub const MAX_DESCRIPTION_LEN: usize = 512;
+
 // Seeds
-pub const SEED_CONFIG:    &[u8] = b"qvault_config";
-pub const SEED_STAKE:     &[u8] = b"stake_account";
-pub const SEED_TREASURY:  &[u8] = b"treasury";
-pub const SEED_PROPOSAL:  &[u8] = b"proposal";
+pub const SEED_CONFIG:        &[u8] = b"qvault_config";
+pub const SEED_STAKE:         &[u8] = b"stake_account";
+pub const SEED_TREASURY:      &[u8] = b"treasury";
+pub const SEED_STAKING_VAULT: &[u8] = b"staking_vault";
+pub const SEED_BUYBACK:       &[u8] = b"buyback_vault";
+pub const SEED_DAO:           &[u8] = b"dao_vault";
+pub const SEED_PROPOSAL:      &[u8] = b"proposal";
+pub const SEED_VESTING:       &[u8] = b"vesting";
 
 // ── Error Codes ──────────────────────────────────────────────────────────────
 #[error_code]
@@ -96,6 +104,26 @@ pub enum QvaultError {
     InvalidFeeSplit,
     #[msg("Metadata URI too long (max 200 chars)")]
     UriTooLong,
+    #[msg("Amount must be greater than zero")]
+    AmountZero,
+    #[msg("Treasury has insufficient balance for this operation")]
+    InsufficientTreasury,
+    #[msg("Provided vault account does not match the configured vault")]
+    InvalidVaultAccount,
+    #[msg("No rewards available to claim")]
+    NothingToClaim,
+    #[msg("Proposal title exceeds maximum length")]
+    TitleTooLong,
+    #[msg("Proposal description exceeds maximum length")]
+    DescriptionTooLong,
+    #[msg("Caller is not the pending admin")]
+    NotPendingAdmin,
+    #[msg("Invalid vesting parameters")]
+    InvalidVestingParams,
+    #[msg("Vesting cliff not reached yet")]
+    CliffNotReached,
+    #[msg("Nothing is currently vested to claim")]
+    NothingVested,
 }
 
 // ── Program Entry ─────────────────────────────────────────────────────────────
@@ -109,12 +137,17 @@ pub mod qvault {
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
         let config = &mut ctx.accounts.config;
         config.admin           = ctx.accounts.admin.key();
+        config.pending_admin   = Pubkey::default();
         config.mint            = ctx.accounts.mint.key();
         config.treasury_vault  = ctx.accounts.treasury_vault.key();
+        config.staking_vault   = ctx.accounts.staking_vault.key();
+        config.buyback_vault   = ctx.accounts.buyback_vault.key();
+        config.dao_vault       = ctx.accounts.dao_vault.key();
         config.paused          = false;
         config.total_staked    = 0;
         config.total_fees_collected = 0;
         config.total_burned    = 0;
+        config.total_distributed = 0;
         config.proposal_count  = 0;
         config.bump            = ctx.bumps.config;
 
@@ -218,7 +251,10 @@ pub mod qvault {
             .checked_add(amount)
             .ok_or(QvaultError::MathOverflow)?;
         stake_acc.staked_at   = clock.unix_timestamp;
-        stake_acc.unlock_at   = clock.unix_timestamp + (lockup_days as i64) * 86_400;
+        // Lockup can only be EXTENDED, never shortened: a new stake with a
+        // shorter (or zero) lockup must not unlock previously locked tokens.
+        let new_unlock = clock.unix_timestamp + (lockup_days as i64) * 86_400;
+        stake_acc.unlock_at   = stake_acc.unlock_at.max(new_unlock);
         stake_acc.tier        = get_tier(stake_acc.amount);
         stake_acc.bump        = ctx.bumps.stake_account;
 
@@ -272,8 +308,11 @@ pub mod qvault {
             amount,
         )?;
 
-        // Pay out rewards from treasury vault
-        if total_rewards > 0 && ctx.accounts.treasury_vault.amount >= total_rewards {
+        // Pay out rewards from treasury vault. If the treasury can't cover them,
+        // carry them over as pending (never silently drop the user's rewards).
+        let rewards_paid =
+            total_rewards > 0 && ctx.accounts.treasury_vault.amount >= total_rewards;
+        if rewards_paid {
             token::transfer(
                 CpiContext::new_with_signer(
                     ctx.accounts.token_program.to_account_info(),
@@ -291,7 +330,7 @@ pub mod qvault {
         stake_acc.amount = stake_acc.amount
             .checked_sub(amount)
             .ok_or(QvaultError::MathOverflow)?;
-        stake_acc.pending_rewards = 0;
+        stake_acc.pending_rewards = if rewards_paid { 0 } else { total_rewards };
         stake_acc.staked_at       = clock.unix_timestamp;
         stake_acc.tier            = get_tier(stake_acc.amount);
 
@@ -325,25 +364,29 @@ pub mod qvault {
             .checked_add(pending)
             .ok_or(QvaultError::MathOverflow)?;
 
-        require!(total_rewards > 0, QvaultError::NothingStaked);
+        require!(total_rewards > 0, QvaultError::NothingToClaim);
+        // Require the treasury can actually pay before mutating state, so the
+        // user never loses accrued rewards to an underfunded treasury.
+        require!(
+            ctx.accounts.treasury_vault.amount >= total_rewards,
+            QvaultError::InsufficientTreasury
+        );
 
         let seeds: &[&[u8]] = &[SEED_CONFIG, &[config.bump]];
         let signer = &[seeds];
 
-        if ctx.accounts.treasury_vault.amount >= total_rewards {
-            token::transfer(
-                CpiContext::new_with_signer(
-                    ctx.accounts.token_program.to_account_info(),
-                    Transfer {
-                        from:      ctx.accounts.treasury_vault.to_account_info(),
-                        to:        ctx.accounts.user_token_account.to_account_info(),
-                        authority: ctx.accounts.config.to_account_info(),
-                    },
-                    signer,
-                ),
-                total_rewards,
-            )?;
-        }
+        token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from:      ctx.accounts.treasury_vault.to_account_info(),
+                    to:        ctx.accounts.user_token_account.to_account_info(),
+                    authority: ctx.accounts.config.to_account_info(),
+                },
+                signer,
+            ),
+            total_rewards,
+        )?;
 
         stake_acc.pending_rewards = 0;
         stake_acc.staked_at       = clock.unix_timestamp; // reset accrual window
@@ -360,6 +403,17 @@ pub mod qvault {
     /// Admin deposits protocol fees and distributes them per the fee split.
     pub fn distribute_fees(ctx: Context<DistributeFees>, amount: u64) -> Result<()> {
         require!(!ctx.accounts.config.paused, QvaultError::Paused);
+        require!(amount > 0, QvaultError::AmountZero);
+        // Validate destination vaults against the ones registered at init, so a
+        // caller can't redirect the buyback/DAO shares to arbitrary accounts.
+        require!(
+            ctx.accounts.buyback_vault.key() == ctx.accounts.config.buyback_vault,
+            QvaultError::InvalidVaultAccount
+        );
+        require!(
+            ctx.accounts.dao_vault.key() == ctx.accounts.config.dao_vault,
+            QvaultError::InvalidVaultAccount
+        );
 
         // Transfer fee tokens in from fee payer
         token::transfer(
@@ -473,6 +527,11 @@ pub mod qvault {
         description: String,
     ) -> Result<()> {
         require!(!ctx.accounts.config.paused, QvaultError::Paused);
+        require!(title.len() <= MAX_TITLE_LEN, QvaultError::TitleTooLong);
+        require!(
+            description.len() <= MAX_DESCRIPTION_LEN,
+            QvaultError::DescriptionTooLong
+        );
 
         let stake_acc = &ctx.accounts.stake_account;
         require!(
@@ -624,13 +683,167 @@ pub mod qvault {
         Ok(())
     }
 
-    // ── 12. ADMIN: TRANSFER ADMIN ─────────────────────────────────────────
+    // ── 12. ADMIN: TRANSFER ADMIN (two-step) ──────────────────────────────
+    /// Step 1: current admin nominates a new admin. Nothing changes until the
+    /// nominee accepts, preventing transfers to a wrong/unrecoverable address.
     pub fn transfer_admin(ctx: Context<AdminOnly>, new_admin: Pubkey) -> Result<()> {
         require!(
             ctx.accounts.admin.key() == ctx.accounts.config.admin,
             QvaultError::Unauthorized
         );
-        ctx.accounts.config.admin = new_admin;
+        ctx.accounts.config.pending_admin = new_admin;
+        emit!(AdminTransferProposed {
+            current_admin: ctx.accounts.config.admin,
+            pending_admin: new_admin,
+        });
+        Ok(())
+    }
+
+    /// Step 2: the nominated admin accepts and becomes the new admin.
+    pub fn accept_admin(ctx: Context<AcceptAdmin>) -> Result<()> {
+        require!(
+            ctx.accounts.new_admin.key() == ctx.accounts.config.pending_admin,
+            QvaultError::NotPendingAdmin
+        );
+        let config = &mut ctx.accounts.config;
+        let old = config.admin;
+        config.admin = config.pending_admin;
+        config.pending_admin = Pubkey::default();
+        emit!(AdminChanged { old_admin: old, new_admin: config.admin });
+        Ok(())
+    }
+
+    // ── 13. ADMIN: WITHDRAW FROM TREASURY ─────────────────────────────────
+    /// Moves tokens out of the treasury to any destination. This is the core
+    /// distribution primitive: fair-launch liquidity seeding (Raydium), airdrops,
+    /// DAO operations, etc. Admin-gated — MUST be a multisig before mainnet.
+    pub fn withdraw_treasury(ctx: Context<WithdrawTreasury>, amount: u64) -> Result<()> {
+        require!(
+            ctx.accounts.admin.key() == ctx.accounts.config.admin,
+            QvaultError::Unauthorized
+        );
+        require!(amount > 0, QvaultError::AmountZero);
+        require!(
+            ctx.accounts.treasury_vault.amount >= amount,
+            QvaultError::InsufficientTreasury
+        );
+
+        let bump = ctx.accounts.config.bump;
+        let seeds: &[&[u8]] = &[SEED_CONFIG, &[bump]];
+        let signer = &[seeds];
+
+        token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from:      ctx.accounts.treasury_vault.to_account_info(),
+                    to:        ctx.accounts.destination.to_account_info(),
+                    authority: ctx.accounts.config.to_account_info(),
+                },
+                signer,
+            ),
+            amount,
+        )?;
+
+        let config = &mut ctx.accounts.config;
+        config.total_distributed = config.total_distributed
+            .checked_add(amount)
+            .ok_or(QvaultError::MathOverflow)?;
+
+        emit!(TreasuryWithdrawn {
+            destination: ctx.accounts.destination.key(),
+            amount,
+            total_distributed: config.total_distributed,
+        });
+        Ok(())
+    }
+
+    // ── 14. ADMIN: CREATE VESTING SCHEDULE ────────────────────────────────
+    /// Sets up a linear vesting schedule (with cliff) for a beneficiary. Tokens
+    /// stay in the treasury and are released via `claim_vested`. Covers Team
+    /// (12mo cliff + 24mo), Community (36mo linear), Partners (6mo cliff + 18mo).
+    pub fn create_vesting(
+        ctx: Context<CreateVesting>,
+        beneficiary: Pubkey,
+        total_amount: u64,
+        cliff_seconds: i64,
+        duration_seconds: i64,
+    ) -> Result<()> {
+        require!(
+            ctx.accounts.admin.key() == ctx.accounts.config.admin,
+            QvaultError::Unauthorized
+        );
+        require!(total_amount > 0, QvaultError::AmountZero);
+        require!(
+            duration_seconds > 0 && cliff_seconds >= 0 && cliff_seconds <= duration_seconds,
+            QvaultError::InvalidVestingParams
+        );
+
+        let now = Clock::get()?.unix_timestamp;
+        let v = &mut ctx.accounts.vesting;
+        v.beneficiary    = beneficiary;
+        v.total_amount   = total_amount;
+        v.released_amount = 0;
+        v.start_ts       = now;
+        v.cliff_ts       = now + cliff_seconds;
+        v.end_ts         = now + duration_seconds;
+        v.bump           = ctx.bumps.vesting;
+
+        emit!(VestingCreated {
+            beneficiary,
+            total_amount,
+            cliff_ts: v.cliff_ts,
+            end_ts:   v.end_ts,
+        });
+        Ok(())
+    }
+
+    // ── 15. CLAIM VESTED TOKENS ───────────────────────────────────────────
+    /// Beneficiary claims the amount that has vested so far (from the treasury).
+    pub fn claim_vested(ctx: Context<ClaimVested>) -> Result<()> {
+        let now = Clock::get()?.unix_timestamp;
+        let vesting = &ctx.accounts.vesting;
+
+        let vested = vested_amount(vesting, now)?;
+        let claimable = vested
+            .checked_sub(vesting.released_amount)
+            .ok_or(QvaultError::MathOverflow)?;
+        require!(claimable > 0, QvaultError::NothingVested);
+        require!(
+            ctx.accounts.treasury_vault.amount >= claimable,
+            QvaultError::InsufficientTreasury
+        );
+
+        let bump = ctx.accounts.config.bump;
+        let seeds: &[&[u8]] = &[SEED_CONFIG, &[bump]];
+        let signer = &[seeds];
+
+        token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                Transfer {
+                    from:      ctx.accounts.treasury_vault.to_account_info(),
+                    to:        ctx.accounts.beneficiary_token_account.to_account_info(),
+                    authority: ctx.accounts.config.to_account_info(),
+                },
+                signer,
+            ),
+            claimable,
+        )?;
+
+        let vesting = &mut ctx.accounts.vesting;
+        vesting.released_amount = vesting.released_amount
+            .checked_add(claimable)
+            .ok_or(QvaultError::MathOverflow)?;
+        let config = &mut ctx.accounts.config;
+        config.total_distributed = config.total_distributed
+            .checked_add(claimable)
+            .ok_or(QvaultError::MathOverflow)?;
+
+        emit!(VestingClaimed {
+            beneficiary: ctx.accounts.beneficiary.key(),
+            amount:      claimable,
+        });
         Ok(())
     }
 }
@@ -670,6 +883,36 @@ pub struct Initialize<'info> {
     )]
     pub treasury_vault: Account<'info, TokenAccount>,
 
+    #[account(
+        init,
+        payer              = admin,
+        token::mint        = mint,
+        token::authority   = config,
+        seeds              = [SEED_STAKING_VAULT, mint.key().as_ref()],
+        bump,
+    )]
+    pub staking_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        init,
+        payer              = admin,
+        token::mint        = mint,
+        token::authority   = config,
+        seeds              = [SEED_BUYBACK, mint.key().as_ref()],
+        bump,
+    )]
+    pub buyback_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        init,
+        payer              = admin,
+        token::mint        = mint,
+        token::authority   = config,
+        seeds              = [SEED_DAO, mint.key().as_ref()],
+        bump,
+    )]
+    pub dao_vault: Account<'info, TokenAccount>,
+
     /// CHECK: validated by Metaplex CPI
     #[account(mut)]
     pub metadata: UncheckedAccount<'info>,
@@ -702,7 +945,7 @@ pub struct Stake<'info> {
 
     #[account(
         mut,
-        seeds = [SEED_TREASURY, config.mint.as_ref()],
+        seeds = [SEED_STAKING_VAULT, config.mint.as_ref()],
         bump,
     )]
     pub staking_vault: Account<'info, TokenAccount>,
@@ -730,7 +973,7 @@ pub struct Unstake<'info> {
     #[account(mut, constraint = user_token_account.owner == user.key())]
     pub user_token_account: Account<'info, TokenAccount>,
 
-    #[account(mut, seeds = [SEED_TREASURY, config.mint.as_ref()], bump)]
+    #[account(mut, seeds = [SEED_STAKING_VAULT, config.mint.as_ref()], bump)]
     pub staking_vault: Account<'info, TokenAccount>,
 
     #[account(mut, seeds = [SEED_TREASURY, config.mint.as_ref()], bump)]
@@ -798,7 +1041,10 @@ pub struct ExecuteBuybackBurn<'info> {
     #[account(mut, constraint = mint.key() == config.mint)]
     pub mint: Account<'info, Mint>,
 
-    #[account(mut)]
+    #[account(
+        mut,
+        constraint = buyback_vault.key() == config.buyback_vault @ QvaultError::InvalidVaultAccount,
+    )]
     pub buyback_vault: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
@@ -888,17 +1134,102 @@ pub struct AdminOnly<'info> {
     pub config: Account<'info, GlobalConfig>,
 }
 
+#[derive(Accounts)]
+pub struct AcceptAdmin<'info> {
+    #[account(mut)]
+    pub new_admin: Signer<'info>,
+
+    #[account(mut, seeds = [SEED_CONFIG], bump = config.bump)]
+    pub config: Account<'info, GlobalConfig>,
+}
+
+#[derive(Accounts)]
+pub struct WithdrawTreasury<'info> {
+    #[account(mut)]
+    pub admin: Signer<'info>,
+
+    #[account(mut, seeds = [SEED_CONFIG], bump = config.bump)]
+    pub config: Account<'info, GlobalConfig>,
+
+    #[account(
+        mut,
+        seeds = [SEED_TREASURY, config.mint.as_ref()],
+        bump,
+    )]
+    pub treasury_vault: Account<'info, TokenAccount>,
+
+    #[account(mut, constraint = destination.mint == config.mint)]
+    pub destination: Account<'info, TokenAccount>,
+
+    pub token_program: Program<'info, Token>,
+}
+
+#[derive(Accounts)]
+#[instruction(beneficiary: Pubkey)]
+pub struct CreateVesting<'info> {
+    #[account(mut)]
+    pub admin: Signer<'info>,
+
+    #[account(mut, seeds = [SEED_CONFIG], bump = config.bump)]
+    pub config: Account<'info, GlobalConfig>,
+
+    #[account(
+        init,
+        payer = admin,
+        space = VestingSchedule::LEN,
+        seeds = [SEED_VESTING, beneficiary.as_ref()],
+        bump,
+    )]
+    pub vesting: Account<'info, VestingSchedule>,
+
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+pub struct ClaimVested<'info> {
+    #[account(mut)]
+    pub beneficiary: Signer<'info>,
+
+    #[account(mut, seeds = [SEED_CONFIG], bump = config.bump)]
+    pub config: Account<'info, GlobalConfig>,
+
+    #[account(
+        mut,
+        seeds = [SEED_VESTING, beneficiary.key().as_ref()],
+        bump = vesting.bump,
+        constraint = vesting.beneficiary == beneficiary.key(),
+    )]
+    pub vesting: Account<'info, VestingSchedule>,
+
+    #[account(mut, seeds = [SEED_TREASURY, config.mint.as_ref()], bump)]
+    pub treasury_vault: Account<'info, TokenAccount>,
+
+    #[account(
+        mut,
+        constraint = beneficiary_token_account.owner == beneficiary.key(),
+        constraint = beneficiary_token_account.mint == config.mint,
+    )]
+    pub beneficiary_token_account: Account<'info, TokenAccount>,
+
+    pub token_program: Program<'info, Token>,
+}
+
 // ── Account Structs ───────────────────────────────────────────────────────────
 
 #[account]
 pub struct GlobalConfig {
     pub admin:                Pubkey,  // 32
+    pub pending_admin:        Pubkey,  // 32 — two-step admin transfer
     pub mint:                 Pubkey,  // 32
     pub treasury_vault:       Pubkey,  // 32
+    pub staking_vault:        Pubkey,  // 32 — holds staked principal only
+    pub buyback_vault:        Pubkey,  // 32
+    pub dao_vault:            Pubkey,  // 32
     pub paused:               bool,    //  1
     pub total_staked:         u64,     //  8
     pub total_fees_collected: u64,     //  8
     pub total_burned:         u64,     //  8
+    pub total_distributed:    u64,     //  8 — tokens moved out of treasury
     pub proposal_count:       u64,     //  8
     pub fee_stakers:          u16,     //  2
     pub fee_buyback:          u16,     //  2
@@ -910,7 +1241,8 @@ pub struct GlobalConfig {
 }
 
 impl GlobalConfig {
-    pub const LEN: usize = 8 + 32 + 32 + 32 + 1 + 8 + 8 + 8 + 8 + 2 + 2 + 2 + 2 + 1 + 64;
+    pub const LEN: usize =
+        8 + (32 * 7) + 1 + (8 * 5) + (2 * 4) + 1 + 64;
 }
 
 #[account]
@@ -961,6 +1293,22 @@ impl VoteRecord {
     pub const LEN: usize = 8 + 32 + 8 + 1 + 1 + 8;
 }
 
+#[account]
+pub struct VestingSchedule {
+    pub beneficiary:     Pubkey,  // 32
+    pub total_amount:    u64,     //  8
+    pub released_amount: u64,     //  8
+    pub start_ts:        i64,     //  8
+    pub cliff_ts:        i64,     //  8
+    pub end_ts:          i64,     //  8
+    pub bump:            u8,      //  1
+    pub _reserved:       [u8; 16],
+}
+
+impl VestingSchedule {
+    pub const LEN: usize = 8 + 32 + 8 + 8 + 8 + 8 + 8 + 1 + 16;
+}
+
 // ── Events ────────────────────────────────────────────────────────────────────
 #[event] pub struct TokenInitialized { pub mint: Pubkey, pub supply: u64, pub admin: Pubkey }
 #[event] pub struct Staked           { pub user: Pubkey, pub amount: u64, pub tier: u8, pub unlock: i64 }
@@ -972,6 +1320,11 @@ impl VoteRecord {
 #[event] pub struct Voted            { pub voter: Pubkey, pub proposal_id: u64, pub support: bool, pub voting_power: u64 }
 #[event] pub struct ProposalExecuted { pub id: u64, pub votes_for: u64, pub votes_against: u64 }
 #[event] pub struct PauseToggled     { pub paused: bool }
+#[event] pub struct AdminTransferProposed { pub current_admin: Pubkey, pub pending_admin: Pubkey }
+#[event] pub struct AdminChanged      { pub old_admin: Pubkey, pub new_admin: Pubkey }
+#[event] pub struct TreasuryWithdrawn { pub destination: Pubkey, pub amount: u64, pub total_distributed: u64 }
+#[event] pub struct VestingCreated    { pub beneficiary: Pubkey, pub total_amount: u64, pub cliff_ts: i64, pub end_ts: i64 }
+#[event] pub struct VestingClaimed    { pub beneficiary: Pubkey, pub amount: u64 }
 
 // ── Helper Functions ──────────────────────────────────────────────────────────
 
@@ -991,21 +1344,39 @@ pub fn tier_apy_bps(tier: u8) -> u16 {
     }
 }
 
-/// Simple linear rewards: amount × APY × (elapsed_seconds / seconds_per_year)
+/// Simple linear rewards: amount × APY × (elapsed_seconds / seconds_per_year).
+/// Computed in u128 to avoid overflow on large stakes (principal × apy × elapsed
+/// easily exceeds u64 within seconds for big stakers).
 pub fn calculate_pending_rewards(stake_acc: &StakeAccount, now: i64) -> Result<u64> {
-    let elapsed = now.saturating_sub(stake_acc.staked_at).max(0) as u64;
-    let apy_bps = tier_apy_bps(stake_acc.tier) as u64;
-    // reward = principal * apy_bps / 10_000 * elapsed / 31_536_000
-    let reward = stake_acc.amount
+    let elapsed = now.saturating_sub(stake_acc.staked_at).max(0) as u128;
+    let apy_bps = tier_apy_bps(stake_acc.tier) as u128;
+    // reward = principal * apy_bps * elapsed / 10_000 / 31_536_000
+    let reward = (stake_acc.amount as u128)
         .checked_mul(apy_bps)
         .ok_or(QvaultError::MathOverflow)?
         .checked_mul(elapsed)
         .ok_or(QvaultError::MathOverflow)?
-        .checked_div(10_000)
+        / 10_000u128
+        / 31_536_000u128;
+    u64::try_from(reward).map_err(|_| error!(QvaultError::MathOverflow))
+}
+
+/// Linear vesting with cliff. Returns the total amount vested by `now`
+/// (cumulative, not net of what's already been released). Computed in u128.
+pub fn vested_amount(v: &VestingSchedule, now: i64) -> Result<u64> {
+    if now < v.cliff_ts {
+        return Ok(0);
+    }
+    if now >= v.end_ts {
+        return Ok(v.total_amount);
+    }
+    let elapsed  = (now - v.start_ts).max(0) as u128;
+    let duration = (v.end_ts - v.start_ts).max(1) as u128;
+    let vested = (v.total_amount as u128)
+        .checked_mul(elapsed)
         .ok_or(QvaultError::MathOverflow)?
-        .checked_div(31_536_000)
-        .ok_or(QvaultError::MathOverflow)?;
-    Ok(reward)
+        / duration;
+    u64::try_from(vested).map_err(|_| error!(QvaultError::MathOverflow))
 }
 
 /// Apply basis points to an amount

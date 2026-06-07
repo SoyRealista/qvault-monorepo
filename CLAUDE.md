@@ -46,7 +46,7 @@ qvault-monorepo/
 | Layer | Choice | Status |
 |-------|--------|--------|
 | Blockchain | Solana | ✅ Decided |
-| Smart contract | Rust + Anchor 0.30.1 | ✅ Written, needs audit |
+| Smart contract | Rust + Anchor 0.31.1 | ✅ Builds + IDL, deployed to devnet, needs audit |
 | Token standard | SPL Token + Metaplex metadata | ✅ Implemented |
 | Web hosting | Cloudflare Pages (free) | 🔜 To set up |
 | Domain | qvault.es (Arsys) | 🔜 Registering |

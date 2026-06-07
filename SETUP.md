@@ -15,13 +15,28 @@ export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
 # Anchor (via avm)
 cargo install --git https://github.com/coral-xyz/anchor avm --locked
-avm install 0.30.1
-avm use 0.30.1
+avm install 0.31.1
+avm use 0.31.1
+
+# Nightly toolchain — REQUIRED for IDL generation.
+# Anchor 0.31's `anchor build` compiles the IDL with the `nightly` toolchain,
+# and its IDL deps (darling, serde_with) need rustc >= 1.88. An outdated
+# nightly causes: "rustc 1.85.0-nightly is not supported by the following
+# packages". Fix by keeping nightly current:
+rustup toolchain install nightly
+rustup update nightly
 
 # Verify
 solana --version
 anchor --version
+rustup run nightly rustc --version   # must be >= 1.88
 ```
+
+> **Build note:** `Cargo.lock` is committed on purpose — it pins a few deps
+> (time, idna_adapter/icu) to versions compatible with the Solana platform-tools
+> toolchain. Don't delete it. The on-chain program id is
+> `BLTxBWAv3JwewqX8U3TuNBPuTBUyaCd8DSQP1DVGhQiY` (declared in `lib.rs` and
+> `Anchor.toml`).
 
 ## 2. Node.js (for `web/`)
 

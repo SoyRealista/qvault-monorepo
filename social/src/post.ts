@@ -67,8 +67,10 @@ async function main() {
 
   const { X_API_KEY, X_API_SECRET, X_ACCESS_TOKEN, X_ACCESS_SECRET } = process.env;
   if (!X_API_KEY || !X_API_SECRET || !X_ACCESS_TOKEN || !X_ACCESS_SECRET) {
-    console.error("❌ Missing X API credentials (X_API_KEY/X_API_SECRET/X_ACCESS_TOKEN/X_ACCESS_SECRET).");
-    process.exit(1);
+    // Not configured yet (no X secrets) — exit cleanly so scheduled runs don't
+    // show as failures. Add the X_* repo secrets to enable posting.
+    console.log("⏭️  X API credentials not set yet — skipping (add X_* secrets to enable).");
+    return;
   }
 
   const rw = new TwitterApi({

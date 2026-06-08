@@ -45,5 +45,81 @@
     "text": "Early is a feeling. If \"quantum-safe finance is inevitable\" sounds right to you, you're our people. Drop a ⬡ and join the QVAULT community. $QVLT",
     "scheduledFor": null,
     "posted": false
+  },
+  {
+    "id": "edu-shor",
+    "text": "Quantum 101: Shor's algorithm lets a big enough quantum computer reverse the math that turns your private key into a public one. That's the whole threat to ECDSA in a nutshell. Post-quantum crypto fixes it. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "edu-pubkey-thread",
+    "thread": [
+      "\"My coins are safe, my key is secret.\" Mostly true — until you spend. The moment you transact, your public key is exposed on-chain. 🧵 Why that matters for a quantum future. 1/",
+      "A future quantum attacker doesn't need your private key — they could derive it from an exposed public key. Reused/exposed-key addresses are the soft targets. 2/",
+      "The fix isn't panic, it's migration: post-quantum signatures (e.g. NIST's CRYSTALS-Dilithium). That's the foundation of QVAULT's phase-3 L1. Start preparing before you have to. ⬡ $QVLT 3/3"
+    ],
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "product-governance",
+    "text": "Holders steer the ship. $QVLT governance: stake, propose, vote. Reach the 🧊 Qubit tier and you get a seat at the DAO council table. Real power over upgrades, treasury and partnerships. ⬡",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "transparency-vesting",
+    "text": "No silent dumps. Team, community and partner allocations vest on-chain with cliffs and linear release — enforced by the contract, not promises. Transparency is a feature. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "transparency-devnet",
+    "text": "Building in public: the QVAULT contract is live on Solana devnet — staking, fee split, buyback/burn, governance and vesting all working end-to-end. Mainnet comes after a pro audit. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "transparency-roadmap",
+    "text": "The plan, briefly:\n1️⃣ Launch on Solana + community + staking\n2️⃣ Security tooling + listings\n3️⃣ Post-quantum Layer 1 (CRYSTALS-Dilithium)\nOne step at a time. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "culture-glyph",
+    "text": "The ⬡ isn't just a logo. It's a vault, a hex, a signal. If you carry it, you believe finance should survive the quantum era. Wear it. $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "community-poll",
+    "text": "What should QVAULT ship next? 🗳️\n⬡ Staking dashboard\n⬡ QVAULT Academy lesson 1\n⬡ Governance UI\n⬡ More memes\nReply with your pick. We build for you. $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "community-meme",
+    "text": "them: \"quantum computers breaking crypto is decades away\"\nthe research papers: *cutting the estimate again*\nus: building quantum-safe finance now ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "news-jack-template",
+    "text": "Today's headline: <quantum/crypto-security news in one line>. This is exactly why QVAULT exists — we're not waiting for the break, we're building quantum-safe finance now. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "es-intro",
+    "text": "La mayoría de las cripto se apoyan en criptografía que un ordenador cuántico podría romper algún día. Y las estimaciones de ese \"algún día\" no paran de acortarse. QVAULT construye finanzas a prueba de cuántica. ⬡ $QVLT",
+    "scheduledFor": null,
+    "posted": false
+  },
+  {
+    "id": "es-cta",
+    "text": "Comunidad primero. Si crees que unas finanzas a prueba de cuántica son inevitables, este es tu sitio. Haz staking, vota, construye con nosotros. Deja un ⬡ si vienes pronto. $QVLT",
+    "scheduledFor": null,
+    "posted": false
   }
 ]

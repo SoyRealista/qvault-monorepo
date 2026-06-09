@@ -1,0 +1,102 @@
+[
+  {
+    "id": "edu-timeline",
+    "tags": ["quantum", "timeline", "threat"],
+    "text": "The estimates for breaking ECDSA keep getting shorter — not because the threat is here, but because the research keeps moving. The window to build quantum-resistant infrastructure is open right now, not indefinitely. ⬡"
+  },
+  {
+    "id": "edu-nist",
+    "tags": ["quantum", "standards", "nist"],
+    "text": "NIST finalized the first post-quantum cryptography standards in 2024 (CRYSTALS-Kyber, Dilithium). Governments are mandating migration. Finance is next. The infrastructure needs to be ready before the machines are. ⬡ $QVLT"
+  },
+  {
+    "id": "edu-shor",
+    "tags": ["quantum", "shor", "algorithm", "bitcoin"],
+    "text": "Shor's algorithm is why this matters — it can factor large integers exponentially faster than classical computers. That's the math protecting Bitcoin's keys. A powerful enough quantum machine would change the game. ⬡"
+  },
+  {
+    "id": "edu-pubkey",
+    "tags": ["bitcoin", "address", "public key", "exposure"],
+    "text": "Worth noting: once you spend from an address, your public key is on-chain forever. A future quantum adversary wouldn't need your private key — they'd derive it from the public one. Reused addresses are the softest targets. ⬡"
+  },
+  {
+    "id": "edu-dilithium",
+    "tags": ["post-quantum", "signature", "dilithium", "crystals"],
+    "text": "CRYSTALS-Dilithium is the leading post-quantum signature scheme — selected by NIST, lattice-based, already implementable today. It's what the next generation of blockchains needs to be built on. ⬡ $QVLT"
+  },
+  {
+    "id": "edu-notscifi",
+    "tags": ["quantum", "sci-fi", "hype", "real"],
+    "text": "Post-quantum crypto isn't sci-fi — NIST already standardized it, Google and IBM are pushing qubit counts every quarter, and financial institutions are running migration programs now. The question is whether crypto catches up in time. ⬡"
+  },
+  {
+    "id": "build-community",
+    "tags": ["community", "movement", "quantum", "safe"],
+    "text": "This is exactly the conversation the crypto community needs more of. Most projects are ignoring the quantum timeline entirely. We're building QVAULT around this thesis — community-first, quantum-safe roadmap. ⬡ $QVLT"
+  },
+  {
+    "id": "build-solana",
+    "tags": ["solana", "defi", "quantum", "fees"],
+    "text": "Building quantum-safe DeFi on Solana makes sense for this — sub-cent fees mean frequent staking, governance, and protocol activity doesn't price out regular users. The foundation has to be accessible. ⬡ $QVLT"
+  },
+  {
+    "id": "build-vesting",
+    "tags": ["transparency", "vesting", "team", "trust"],
+    "text": "On-chain vesting enforced by the smart contract — not promises, not lockups on a spreadsheet. This is what crypto accountability actually looks like. We built this into QVAULT from day one. ⬡"
+  },
+  {
+    "id": "news-google",
+    "tags": ["google", "quantum", "supremacy", "milestone"],
+    "text": "Every time Google or IBM hits a new qubit milestone, the timeline estimates get revised. Not doomsday — but the direction is consistent. This is why we started building quantum-safe finance now, not later. ⬡ $QVLT"
+  },
+  {
+    "id": "news-ibm",
+    "tags": ["ibm", "qubit", "quantum", "milestone"],
+    "text": "IBM's roadmap has been methodical and on schedule. When the hardware catches up to the algorithm requirements, the window for migration will already be closing. Building before that point is the only real option. ⬡"
+  },
+  {
+    "id": "news-china",
+    "tags": ["china", "quantum", "nation", "state"],
+    "text": "Nation-state quantum programs are the ones with the most resources and the least transparency. The assumption that we'll have public warning before a breakthrough is optimistic. Preparation has to come first. ⬡ $QVLT"
+  },
+  {
+    "id": "dao-governance",
+    "tags": ["dao", "governance", "vote", "community"],
+    "text": "Real governance means stakers actually control the protocol — not a multisig of the founding team with a 'community vote' UI. On-chain proposals, on-chain voting, on-chain execution. That's what we built. ⬡ $QVLT"
+  },
+  {
+    "id": "buyback-burn",
+    "tags": ["tokenomics", "burn", "buyback", "supply"],
+    "text": "Buyback & burn funded by protocol fees — not by the team dumping treasury. 20% of every fee goes to reducing supply automatically. Usage creates value for holders without any manual intervention. ⬡ $QVLT"
+  },
+  {
+    "id": "early",
+    "tags": ["early", "community", "movement", "vision"],
+    "text": "The best time to join a movement is before it's obvious. The quantum threat to crypto is still treated as fringe — that's exactly the window. ⬡ $QVLT"
+  },
+  {
+    "id": "prepare-not-panic",
+    "tags": ["panic", "calm", "prepare", "quantum"],
+    "text": "Not panic, preparation. The quantum threat isn't a reason to abandon crypto — it's a reason to build quantum-resistant crypto. That distinction matters a lot. ⬡ $QVLT"
+  },
+  {
+    "id": "staking-utility",
+    "tags": ["staking", "yield", "defi", "rewards"],
+    "text": "Staking that actually means something: lock tokens → earn protocol fees → vote on governance → participate in buyback/burn mechanics. Not just APY theater — real protocol ownership. ⬡ $QVLT"
+  },
+  {
+    "id": "migration-window",
+    "tags": ["migration", "cryptography", "upgrade", "timeline"],
+    "text": "The IETF, NIST, and major cloud providers are all running PQC migration programs now. When government and enterprise move first, retail crypto will be behind. The window to build is now. ⬡"
+  },
+  {
+    "id": "layer1-vision",
+    "tags": ["layer1", "blockchain", "quantum", "l1"],
+    "text": "A purpose-built post-quantum Layer 1 is the long game — CRYSTALS-Dilithium signatures from genesis block. No migration debt, no legacy cryptography to patch. That's Phase 3 of what we're building. ⬡ $QVLT"
+  },
+  {
+    "id": "generic-engage",
+    "tags": [],
+    "text": "Exactly the kind of thinking the crypto space needs more of. The intersection of quantum computing and financial infrastructure is underexplored — and the window to build before it matters is finite. ⬡ $QVLT"
+  }
+]

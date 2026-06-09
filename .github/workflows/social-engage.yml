@@ -1,0 +1,42 @@
+name: QVAULT engagement bot
+
+on:
+  schedule:
+    # 3x per week: Mon/Wed/Fri at 10:00 UTC (different time from posting bot)
+    - cron: "0 10 * * 1,3,5"
+  workflow_dispatch: # allow manual trigger
+
+permissions:
+  contents: write # needed to commit replied.json state back
+
+jobs:
+  engage:
+    name: Reply to quantum/crypto conversations
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install
+        working-directory: social
+        run: npm install --no-audit --no-fund
+
+      - name: Run engagement bot
+        working-directory: social
+        env:
+          X_API_KEY:        ${{ secrets.X_API_KEY }}
+          X_API_SECRET:     ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN:   ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET:  ${{ secrets.X_ACCESS_SECRET }}
+        run: npm run engage
+
+      - name: Persist replied state
+        run: |
+          git config user.name  "QVAULT Bot"
+          git config user.email "bot@qvault.es"
+          git add social/content/replied.json
+          git diff --staged --quiet || git commit -m "bot: update replied.json [skip ci]"
+          git push

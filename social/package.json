@@ -5,7 +5,9 @@
   "description": "QVAULT X/Twitter auto-posting bot",
   "scripts": {
     "post": "ts-node src/post.ts",
-    "dry": "DRY_RUN=1 ts-node src/post.ts"
+    "dry": "DRY_RUN=1 ts-node src/post.ts",
+    "engage": "ts-node src/engage.ts",
+    "engage:dry": "DRY_RUN=1 ts-node src/engage.ts"
   },
   "dependencies": {
     "twitter-api-v2": "^1.18.2"

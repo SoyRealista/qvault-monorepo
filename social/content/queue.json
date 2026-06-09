@@ -16,7 +16,9 @@
     "id": "hook-quantum",
     "text": "Your keys are protected by math a quantum computer could one day solve. The estimates for \"one day\" keep getting shorter. Not panic — preparation. That's why QVAULT exists. ⬡ $QVLT",
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-09T21:24:30.440Z",
+    "tweetId": "2064458640346521728"
   },
   {
     "id": "staking",
@@ -124,7 +126,6 @@
     "scheduledFor": null,
     "posted": false
   },
-
   {
     "id": "launch-d11-teaser",
     "text": "Something is coming.\n\nThe financial system wasn't built for the quantum era. We're fixing that.\n\n11 days. ⬡ $QVLT",

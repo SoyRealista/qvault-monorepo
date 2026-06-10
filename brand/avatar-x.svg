@@ -1,42 +1,60 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
   <defs>
-    <pattern id="hexbg" x="0" y="0" width="60" height="69" patternUnits="userSpaceOnUse">
-      <polygon points="30,2 58,17 58,47 30,62 2,47 2,17" fill="none" stroke="#1E2A4A" stroke-width="1"/>
-    </pattern>
-    <clipPath id="circle">
-      <circle cx="200" cy="200" r="200"/>
-    </clipPath>
+    <clipPath id="circ"><circle cx="200" cy="200" r="200"/></clipPath>
   </defs>
 
   <!-- Background -->
   <circle cx="200" cy="200" r="200" fill="#070B18"/>
-  <circle cx="200" cy="200" r="200" fill="url(#hexbg)" clip-path="url(#circle)"/>
 
-  <!-- Outer ring -->
-  <circle cx="200" cy="200" r="192" fill="none" stroke="#1E3A5F" stroke-width="2"/>
+  <!-- Subtle radial hex rings (background texture) -->
+  <g opacity="0.12" stroke="#2A3A6A" stroke-width="0.8" fill="none" clip-path="url(#circ)">
+    <polygon points="200,10 252,40 252,100 200,130 148,100 148,40"/>
+    <polygon points="304,70 356,100 356,160 304,190 252,160 252,100"/>
+    <polygon points="96,70 148,100 148,160 96,190 44,160 44,100"/>
+    <polygon points="200,130 252,160 252,220 200,250 148,220 148,160"/>
+    <polygon points="304,190 356,220 356,280 304,310 252,280 252,220"/>
+    <polygon points="96,190 148,220 148,280 96,310 44,280 44,220"/>
+    <polygon points="200,250 252,280 252,340 200,370 148,340 148,280"/>
+  </g>
 
-  <!-- Hex glyph — outer -->
-  <polygon points="200,60 310,123 310,249 200,312 90,249 90,123"
-           fill="none" stroke="#00D4FF" stroke-width="3" stroke-linejoin="round"/>
-  <!-- Hex glyph — inner fill -->
-  <polygon points="200,90 282,137 282,231 200,278 118,231 118,137"
-           fill="#0A1628" stroke="#7C3AED" stroke-width="1.5" stroke-linejoin="round"/>
-  <!-- Inner hex shine -->
-  <polygon points="200,100 272,143 272,229 200,272 128,229 128,143"
-           fill="#00D4FF" opacity="0.05"/>
+  <!-- Outer ring accent -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#0F1E3A" stroke-width="1"/>
 
-  <!-- Q letter centered -->
-  <text x="200" y="228"
-        font-family="'SF Pro Display','Helvetica Neue',Arial,sans-serif"
-        font-size="130" font-weight="900" fill="#FFFFFF"
-        text-anchor="middle" dominant-baseline="middle">Q</text>
+  <!-- Main hex — outer glow via two strokes -->
+  <polygon points="200,50 320,118 320,254 200,322 80,254 80,118"
+           fill="none" stroke="#00C8F0" stroke-width="2" stroke-linejoin="round" opacity="0.3"/>
+  <polygon points="200,44 326,115 326,257 200,328 74,257 74,115"
+           fill="none" stroke="#00C8F0" stroke-width="5" stroke-linejoin="round"/>
 
-  <!-- Cyan bottom accent line inside hex -->
-  <line x1="140" y1="272" x2="260" y2="272" stroke="#00D4FF" stroke-width="2.5" opacity="0.6"/>
+  <!-- Inner hex — filled, dark navy -->
+  <polygon points="200,80 294,133 294,239 200,292 106,239 106,133"
+           fill="#0A1628"/>
 
-  <!-- VAULT small text below Q -->
-  <text x="200" y="302"
-        font-family="'SF Pro Display','Helvetica Neue',Arial,sans-serif"
-        font-size="24" font-weight="700" fill="#94A3B8"
-        text-anchor="middle" letter-spacing="8">VAULT</text>
+  <!-- Inner hex border — violet -->
+  <polygon points="200,80 294,133 294,239 200,292 106,239 106,133"
+           fill="none" stroke="#6D28D9" stroke-width="2" stroke-linejoin="round"/>
+
+  <!-- Vertex dots on outer hex -->
+  <circle cx="200" cy="44"  r="5" fill="#00C8F0"/>
+  <circle cx="326" cy="115" r="5" fill="#00C8F0"/>
+  <circle cx="326" cy="257" r="5" fill="#00C8F0"/>
+  <circle cx="200" cy="328" r="5" fill="#00C8F0"/>
+  <circle cx="74"  cy="257" r="5" fill="#00C8F0"/>
+  <circle cx="74"  cy="115" r="5" fill="#00C8F0"/>
+
+  <!-- Centered hex glyph ⬡ — perfectly symmetric, no tail -->
+  <text x="200" y="230"
+        font-family="'Helvetica Neue',Arial,sans-serif"
+        font-size="155" font-weight="400"
+        fill="#00C8F0"
+        text-anchor="middle"
+        dominant-baseline="alphabetic">⬡</text>
+
+  <!-- QV monogram centered inside the ⬡ -->
+  <text x="200" y="220"
+        font-family="'Helvetica Neue',Arial,sans-serif"
+        font-size="68" font-weight="900"
+        fill="#FFFFFF"
+        text-anchor="middle"
+        dominant-baseline="alphabetic">QV</text>
 </svg>

@@ -24,14 +24,22 @@ const MAX_PER_RUN     = 3;
 const MIN_LIKES       = 2;
 const OWN_HANDLE      = "TheQVault";
 
-// Search queries — mix of angles, picked one per run to spread coverage
+// Search queries — one per run, rotated by day-of-year so a daily schedule
+// cycles through all of them. Two blocks: the quantum niche (core thesis,
+// high relevance) and broader crypto conversations (high volume, visibility).
 const QUERIES = [
+  // ── Quantum niche (core thesis) ──
   '("quantum computer" OR "quantum computing") (bitcoin OR crypto OR blockchain) -is:retweet -is:reply lang:en',
   '("post-quantum" OR "post quantum") (crypto OR blockchain OR defi) -is:retweet -is:reply lang:en',
-  '("shor\'s algorithm" OR "shor algorithm") (bitcoin OR crypto) -is:retweet -is:reply lang:en',
   '"quantum threat" (crypto OR bitcoin OR blockchain) -is:retweet -is:reply lang:en',
-  '("quantum supremacy" OR "quantum milestone") (crypto OR bitcoin) -is:retweet -is:reply lang:en',
   '"CRYSTALS-Dilithium" OR "post-quantum cryptography" -is:retweet -is:reply lang:en',
+  // ── Broader crypto (visibility) ──
+  '(solana OR "$SOL") (staking OR defi OR ecosystem) -is:retweet -is:reply lang:en',
+  '("token launch" OR launchpad OR "new project") solana -is:retweet -is:reply lang:en',
+  '("crypto security" OR "wallet security" OR "protect your crypto") -is:retweet -is:reply lang:en',
+  '(tokenomics OR "buyback and burn" OR "fee sharing") (crypto OR defi) -is:retweet -is:reply lang:en',
+  '("dao governance" OR "on-chain governance") crypto -is:retweet -is:reply lang:en',
+  '("future of crypto" OR "crypto in 2030" OR "next bull run") -is:retweet -is:reply lang:en',
 ];
 
 type Template = { id: string; tags: string[]; text: string };
@@ -67,9 +75,11 @@ function pickTemplate(tweetText: string, templates: Template[]): Template {
 }
 
 function pickQuery(): string {
-  // Rotate queries based on day of week for variety
-  const idx = new Date().getDay() % QUERIES.length;
-  return QUERIES[idx];
+  // Rotate by day-of-year so a daily schedule cycles through every query
+  const now = new Date();
+  const start = Date.UTC(now.getUTCFullYear(), 0, 0);
+  const dayOfYear = Math.floor((now.getTime() - start) / 86400000);
+  return QUERIES[dayOfYear % QUERIES.length];
 }
 
 /* ─── main ────────────────────────────────────────────────────────── */

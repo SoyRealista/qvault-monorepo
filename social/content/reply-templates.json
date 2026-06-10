@@ -95,8 +95,38 @@
     "text": "A purpose-built post-quantum Layer 1 is the long game — CRYSTALS-Dilithium signatures from genesis block. No migration debt, no legacy cryptography to patch. That's Phase 3 of what we're building. ⬡ $QVLT #QuantumComputing #Solana"
   },
   {
+    "id": "solana-ecosystem",
+    "tags": ["solana", "sol", "ecosystem", "fast", "fees"],
+    "text": "Solana's sub-cent fees are what make community-driven protocols viable — staking, voting and fee-sharing don't work when every tx costs dollars. That's why we're building there. ⬡ $QVLT qvlt.xyz #Solana"
+  },
+  {
+    "id": "new-launch",
+    "tags": ["launch", "launchpad", "new project", "token launch", "presale"],
+    "text": "The bar for new launches should be: working product on devnet, on-chain vesting, no hidden allocations. That's the standard we set for ourselves — genesis June 20. ⬡ $QVLT qvlt.xyz"
+  },
+  {
+    "id": "crypto-security",
+    "tags": ["security", "wallet", "protect", "hack", "exploit"],
+    "text": "Most people protect their keys from hackers but ignore the bigger threat on the horizon: quantum computers breaking the cryptography itself. Both matter. We're building for the second one. ⬡ qvlt.xyz #CryptoSecurity"
+  },
+  {
+    "id": "tokenomics-design",
+    "tags": ["tokenomics", "buyback", "burn", "fee sharing", "supply"],
+    "text": "Good tokenomics = value flows to the people who use the protocol. Our split: 40% of fees to stakers, 20% buyback & burn, 25% DAO, 15% growth. All on-chain, all automatic. ⬡ $QVLT qvlt.xyz #DeFi"
+  },
+  {
+    "id": "governance-take",
+    "tags": ["dao", "governance", "vote", "decentralized", "community"],
+    "text": "On-chain governance only works when stakers have real power — proposals, votes and execution all enforced by the contract. Anything else is decoration. That's how we built ours. ⬡ $QVLT qvlt.xyz #DAO"
+  },
+  {
+    "id": "future-crypto",
+    "tags": ["future", "2030", "bull run", "next cycle", "long term"],
+    "text": "The next decade of crypto won't be decided by memecoins — it'll be decided by which chains survive the quantum transition. Post-quantum cryptography is the real long-term bet. ⬡ $QVLT qvlt.xyz #QuantumComputing"
+  },
+  {
     "id": "generic-engage",
     "tags": [],
-    "text": "Exactly the kind of thinking the crypto space needs more of. The intersection of quantum computing and financial infrastructure is underexplored — and the window to build before it matters is finite. ⬡ $QVLT #QuantumComputing"
+    "text": "Exactly the kind of thinking the crypto space needs more of. The intersection of quantum computing and financial infrastructure is underexplored — and the window to build before it matters is finite. ⬡ $QVLT qvlt.xyz"
   }
 ]

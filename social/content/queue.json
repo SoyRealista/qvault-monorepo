@@ -14,7 +14,7 @@
   },
   {
     "id": "hook-quantum",
-    "text": "Your keys are protected by math a quantum computer could one day solve. The estimates for \"one day\" keep getting shorter. Not panic — preparation. That's why QVAULT exists. ⬡ $QVLT",
+    "text": "Your keys are protected by math a quantum computer could one day solve. The estimates for \"one day\" keep getting shorter. Not panic — preparation. That's why QVAULT exists. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Solana",
     "scheduledFor": null,
     "posted": true,
     "postedAt": "2026-06-09T21:24:30.440Z",
@@ -22,182 +22,182 @@
   },
   {
     "id": "staking",
-    "text": "Stake $QVLT, earn rewards, get a say. 3 tiers:\n⚡ Electron — 10k\n🔆 Photon — 50k\n🧊 Qubit — 250k (DAO council seat)\nFee-sharing + governance baked in. Tokenomics 2.0. ⬡",
+    "text": "Stake $QVLT, earn rewards, get a say. 3 tiers:\n⚡ Electron — 10k\n🔆 Photon — 50k\n🧊 Qubit — 250k (DAO council seat)\nFee-sharing + governance baked in. Tokenomics 2.0. ⬡\n\n#Solana #DeFi #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "buyback-burn",
-    "text": "Every bit of protocol usage works for holders: 40% of fees → stakers, 20% → buyback & burn 🔥, 25% → DAO, 15% → growth. Usage up → supply pressure down. $QVLT ⬡",
+    "text": "Every bit of protocol usage works for holders: 40% of fees → stakers, 20% → buyback & burn 🔥, 25% → DAO, 15% → growth. Usage up → supply pressure down. $QVLT ⬡\n\n#DeFi #Solana #Tokenomics",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "why-solana",
-    "text": "Why launch on Solana? Sub-cent fees + speed. A community token built around frequent staking only works where transactions are nearly free. The quantum-safe L1 comes later — phase 3. $QVLT ⬡",
+    "text": "Why launch on Solana? Sub-cent fees + speed. A community token built around frequent staking only works where transactions are nearly free. The quantum-safe L1 comes later — phase 3. $QVLT ⬡\n\n#Solana #SOL #DeFi",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "education-cta",
-    "text": "The quantum threat is real but misunderstood. We're building QVAULT Academy: free, plain-language post-quantum education. Informed holders > hype. Follow along and learn with us. ⬡ $QVLT",
+    "text": "The quantum threat is real but misunderstood. We're building QVAULT Academy: free, plain-language post-quantum education. Informed holders > hype. Follow along and learn with us. ⬡ $QVLT\n\n#QuantumComputing #PostQuantum #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "community-cta",
-    "text": "Early is a feeling. If \"quantum-safe finance is inevitable\" sounds right to you, you're our people. Drop a ⬡ and join the QVAULT community. $QVLT",
+    "text": "Early is a feeling. If \"quantum-safe finance is inevitable\" sounds right to you, you're our people. Drop a ⬡ and join the QVAULT community. $QVLT\n\n#Solana #DeFi #Web3",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "edu-shor",
-    "text": "Quantum 101: Shor's algorithm lets a big enough quantum computer reverse the math that turns your private key into a public one. That's the whole threat to ECDSA in a nutshell. Post-quantum crypto fixes it. ⬡ $QVLT",
+    "text": "Quantum 101: Shor's algorithm lets a big enough quantum computer reverse the math that turns your private key into a public one. That's the whole threat to ECDSA in a nutshell. Post-quantum crypto fixes it. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #PostQuantum",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "edu-pubkey-thread",
     "thread": [
-      "\"My coins are safe, my key is secret.\" Mostly true — until you spend. The moment you transact, your public key is exposed on-chain. 🧵 Why that matters for a quantum future. 1/",
+      "\"My coins are safe, my key is secret.\" Mostly true — until you spend. The moment you transact, your public key is exposed on-chain. 🧵 Why that matters for a quantum future. #QuantumComputing #Bitcoin 1/",
       "A future quantum attacker doesn't need your private key — they could derive it from an exposed public key. Reused/exposed-key addresses are the soft targets. 2/",
-      "The fix isn't panic, it's migration: post-quantum signatures (e.g. NIST's CRYSTALS-Dilithium). That's the foundation of QVAULT's phase-3 L1. Start preparing before you have to. ⬡ $QVLT 3/3"
+      "The fix isn't panic, it's migration: post-quantum signatures (e.g. NIST's CRYSTALS-Dilithium). That's the foundation of QVAULT's phase-3 L1. Start preparing before you have to. ⬡ $QVLT #PostQuantum #Solana 3/3"
     ],
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "product-governance",
-    "text": "Holders steer the ship. $QVLT governance: stake, propose, vote. Reach the 🧊 Qubit tier and you get a seat at the DAO council table. Real power over upgrades, treasury and partnerships. ⬡",
+    "text": "Holders steer the ship. $QVLT governance: stake, propose, vote. Reach the 🧊 Qubit tier and you get a seat at the DAO council table. Real power over upgrades, treasury and partnerships. ⬡\n\n#Solana #DeFi #DAO",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "transparency-vesting",
-    "text": "No silent dumps. Team, community and partner allocations vest on-chain with cliffs and linear release — enforced by the contract, not promises. Transparency is a feature. ⬡ $QVLT",
+    "text": "No silent dumps. Team, community and partner allocations vest on-chain with cliffs and linear release — enforced by the contract, not promises. Transparency is a feature. ⬡ $QVLT\n\n#Solana #DeFi #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "transparency-devnet",
-    "text": "Building in public: the QVAULT contract is live on Solana devnet — staking, fee split, buyback/burn, governance and vesting all working end-to-end. Mainnet comes after a pro audit. ⬡ $QVLT",
+    "text": "Building in public: the QVAULT contract is live on Solana devnet — staking, fee split, buyback/burn, governance and vesting all working end-to-end. Mainnet comes after a pro audit. ⬡ $QVLT\n\n#Solana #BuildInPublic #DeFi",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "transparency-roadmap",
-    "text": "The plan, briefly:\n1️⃣ Launch on Solana + community + staking\n2️⃣ Security tooling + listings\n3️⃣ Post-quantum Layer 1 (CRYSTALS-Dilithium)\nOne step at a time. ⬡ $QVLT",
+    "text": "The plan, briefly:\n1️⃣ Launch on Solana + community + staking\n2️⃣ Security tooling + listings\n3️⃣ Post-quantum Layer 1 (CRYSTALS-Dilithium)\nOne step at a time. ⬡ $QVLT\n\n#Solana #QuantumComputing #DeFi",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "culture-glyph",
-    "text": "The ⬡ isn't just a logo. It's a vault, a hex, a signal. If you carry it, you believe finance should survive the quantum era. Wear it. $QVLT",
+    "text": "The ⬡ isn't just a logo. It's a vault, a hex, a signal. If you carry it, you believe finance should survive the quantum era. Wear it. $QVLT\n\n#QuantumSafe #Crypto #Web3",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "community-poll",
-    "text": "What should QVAULT ship next? 🗳️\n⬡ Staking dashboard\n⬡ QVAULT Academy lesson 1\n⬡ Governance UI\n⬡ More memes\nReply with your pick. We build for you. $QVLT",
+    "text": "What should QVAULT ship next? 🗳️\n⬡ Staking dashboard\n⬡ QVAULT Academy lesson 1\n⬡ Governance UI\n⬡ More memes\nReply with your pick. We build for you. $QVLT\n\n#Solana #DeFi #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "community-meme",
-    "text": "them: \"quantum computers breaking crypto is decades away\"\nthe research papers: *cutting the estimate again*\nus: building quantum-safe finance now ⬡ $QVLT",
+    "text": "them: \"quantum computers breaking crypto is decades away\"\nthe research papers: *cutting the estimate again*\nus: building quantum-safe finance now ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "news-jack-template",
-    "text": "Today's headline: <quantum/crypto-security news in one line>. This is exactly why QVAULT exists — we're not waiting for the break, we're building quantum-safe finance now. ⬡ $QVLT",
+    "text": "Today's headline: <quantum/crypto-security news in one line>. This is exactly why QVAULT exists — we're not waiting for the break, we're building quantum-safe finance now. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Crypto",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "es-intro",
-    "text": "La mayoría de las cripto se apoyan en criptografía que un ordenador cuántico podría romper algún día. Y las estimaciones de ese \"algún día\" no paran de acortarse. QVAULT construye finanzas a prueba de cuántica. ⬡ $QVLT",
+    "text": "La mayoría de las cripto se apoyan en criptografía que un ordenador cuántico podría romper algún día. Y las estimaciones de ese \"algún día\" no paran de acortarse. QVAULT construye finanzas a prueba de cuántica. ⬡ $QVLT\n\n#ComputaciónCuántica #Bitcoin #Solana",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "es-cta",
-    "text": "Comunidad primero. Si crees que unas finanzas a prueba de cuántica son inevitables, este es tu sitio. Haz staking, vota, construye con nosotros. Deja un ⬡ si vienes pronto. $QVLT",
+    "text": "Comunidad primero. Si crees que unas finanzas a prueba de cuántica son inevitables, este es tu sitio. Haz staking, vota, construye con nosotros. Deja un ⬡ si vienes pronto. $QVLT\n\n#Solana #DeFi #CriptoEspañol",
     "scheduledFor": null,
     "posted": false
   },
   {
     "id": "launch-d11-teaser",
-    "text": "Something is coming.\n\nThe financial system wasn't built for the quantum era. We're fixing that.\n\n11 days. ⬡ $QVLT",
+    "text": "Something is coming.\n\nThe financial system wasn't built for the quantum era. We're fixing that.\n\n11 days. ⬡ $QVLT\n\n#QuantumComputing #Solana #Crypto",
     "scheduledFor": "2026-06-09T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d10-threat",
-    "text": "In 2019 Google claimed \"quantum supremacy.\" In 2023 IBM hit 1000 qubits. In 2025 the estimates for breaking Bitcoin's keys got shorter again.\n\nThe clock is ticking. We started building. 10 days. ⬡ $QVLT",
+    "text": "In 2019 Google claimed \"quantum supremacy.\" In 2023 IBM hit 1000 qubits. In 2025 the estimates for breaking Bitcoin's keys got shorter again.\n\nThe clock is ticking. We started building. 10 days. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Solana",
     "scheduledFor": "2026-06-10T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d9-mission",
     "thread": [
-      "9 days until QVAULT Genesis Launch. Let us tell you exactly what we're building — and why it can't wait. 🧵 1/4",
+      "9 days until QVAULT Genesis Launch. Let us tell you exactly what we're building — and why it can't wait. 🧵 #QuantumComputing #Solana #DeFi 1/4",
       "Classical crypto (Bitcoin, Ethereum, Solana) uses ECDSA/Ed25519 signatures. A sufficiently large quantum computer running Shor's algorithm could derive private keys from public ones. Your funds. Gone. 2/4",
       "QVAULT Phase 1: a community and DeFi protocol on Solana — staking, fee-sharing, buyback & burn, DAO governance. Real utility. Real ownership. Building the people who will build the future. 3/4",
-      "Phase 3 (2027-28): a post-quantum Layer 1 using CRYSTALS-Dilithium signatures. The blockchain that survives what's coming. The mission starts in 9 days. ⬡ $QVLT 4/4"
+      "Phase 3 (2027-28): a post-quantum Layer 1 using CRYSTALS-Dilithium signatures. The blockchain that survives what's coming. The mission starts in 9 days. ⬡ $QVLT #PostQuantum #Solana 4/4"
     ],
     "scheduledFor": "2026-06-11T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d8-solana",
-    "text": "Why Solana? Sub-cent fees. 400ms blocks. A community that moves fast.\n\nYou can't build a quantum-safe financial movement on a chain that costs $30/tx. ⬡ $QVLT\n\n8 days.",
+    "text": "Why Solana? Sub-cent fees. 400ms blocks. A community that moves fast.\n\nYou can't build a quantum-safe financial movement on a chain that costs $30/tx. ⬡ $QVLT\n\n8 days.\n\n#Solana #SOL #DeFi",
     "scheduledFor": "2026-06-12T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d7-week",
-    "text": "One week.\n\nOne week until $QVLT genesis. One week until the quantum-safe financial movement has a home on-chain.\n\nStaking. Fee-sharing. DAO governance. Buyback & burn.\n\nAll live. All on Solana. All yours. ⬡",
+    "text": "One week.\n\nOne week until $QVLT genesis. One week until the quantum-safe financial movement has a home on-chain.\n\nStaking. Fee-sharing. DAO governance. Buyback & burn.\n\nAll live. All on Solana. All yours. ⬡\n\n#Solana #DeFi #QuantumSafe",
     "scheduledFor": "2026-06-13T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d6-tiers",
-    "text": "QVAULT staking tiers — launching in 6 days:\n\n⚡ Electron — 10k $QVLT → rewards\n🔆 Photon — 50k $QVLT → rewards + governance\n🧊 Qubit — 250k $QVLT → DAO council seat\n\nThe earlier you stake, the higher the share. ⬡",
+    "text": "QVAULT staking tiers — launching in 6 days:\n\n⚡ Electron — 10k $QVLT → rewards\n🔆 Photon — 50k $QVLT → rewards + governance\n🧊 Qubit — 250k $QVLT → DAO council seat\n\nThe earlier you stake, the higher the share. ⬡\n\n#Solana #DeFi #Staking",
     "scheduledFor": "2026-06-14T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d5-fees",
-    "text": "Every swap, every stake, every protocol action — the fees work for you:\n\n40% → stakers 💸\n20% → buyback & burn 🔥\n25% → DAO treasury 🏛\n15% → growth fund 🚀\n\nUsage goes up → supply pressure goes up → you benefit. $QVLT ⬡\n\n5 days.",
+    "text": "Every swap, every stake, every protocol action — the fees work for you:\n\n40% → stakers 💸\n20% → buyback & burn 🔥\n25% → DAO treasury 🏛\n15% → growth fund 🚀\n\nUsage goes up → supply pressure goes up → you benefit. $QVLT ⬡\n\n5 days. #DeFi #Solana #Tokenomics",
     "scheduledFor": "2026-06-15T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d4-transparent",
-    "text": "We build in public.\n\n✅ Smart contract on Solana devnet — tested end-to-end\n✅ Code on GitHub (open)\n✅ Team vesting on-chain — enforced by the contract, not promises\n✅ No VC allocation, no hidden wallets\n\n4 days until mainnet. ⬡ $QVLT",
+    "text": "We build in public.\n\n✅ Smart contract on Solana devnet — tested end-to-end\n✅ Code on GitHub (open)\n✅ Team vesting on-chain — enforced by the contract, not promises\n✅ No VC allocation, no hidden wallets\n\n4 days until mainnet. ⬡ $QVLT\n\n#Solana #BuildInPublic #DeFi",
     "scheduledFor": "2026-06-16T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d3-quantum-news",
-    "text": "The quantum threat to crypto isn't hypothetical. It's a countdown.\n\nNIST finalised its first post-quantum standards in 2024. Governments are mandating migration. The crypto world is still ignoring it.\n\nNot us. 3 days. ⬡ $QVLT",
+    "text": "The quantum threat to crypto isn't hypothetical. It's a countdown.\n\nNIST finalised its first post-quantum standards in 2024. Governments are mandating migration. The crypto world is still ignoring it.\n\nNot us. 3 days. ⬡ $QVLT\n\n#QuantumComputing #PostQuantum #Bitcoin",
     "scheduledFor": "2026-06-17T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d2-tomorrow",
-    "text": "Tomorrow.\n\nThe financial infrastructure for the quantum era launches tomorrow.\n\n$QVLT goes live on Solana mainnet. Staking opens. The DAO begins.\n\nIf you believe the future is quantum-safe — this is your moment. ⬡",
+    "text": "Tomorrow.\n\nThe financial infrastructure for the quantum era launches tomorrow.\n\n$QVLT goes live on Solana mainnet. Staking opens. The DAO begins.\n\nIf you believe the future is quantum-safe — this is your moment. ⬡\n\n#Solana #DeFi #QuantumComputing",
     "scheduledFor": "2026-06-19T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-day",
     "thread": [
-      "🚀 TODAY IS THE DAY.\n\nQVAULT ($QVLT) is LIVE on Solana mainnet.\n\nStaking is open. DAO governance is live. The quantum-safe financial movement has a home. 🧵 1/4",
+      "🚀 TODAY IS THE DAY.\n\nQVAULT ($QVLT) is LIVE on Solana mainnet.\n\nStaking is open. DAO governance is live. The quantum-safe financial movement has a home. 🧵 #Solana #QuantumComputing #DeFi 1/4",
       "What's live right now:\n⚡ Staking with 3 tiers (Electron/Photon/Qubit)\n🔥 Buyback & burn mechanism\n🏛 DAO governance with on-chain proposals\n💸 Fee-sharing for stakers\n🔒 Team vesting enforced by contract\n2/4",
       "This is Phase 1. The foundation.\n\nPhase 2: security tooling + exchange listings\nPhase 3: post-quantum Layer 1 (CRYSTALS-Dilithium)\n\nWe're not selling a finished product. We're starting a movement. 3/4",
-      "Get $QVLT on Raydium → stake → earn → vote.\n\nThe quantum era is coming. The question is whether you're in before or after it arrives.\n\nWelcome to QVAULT. ⬡ $QVLT 4/4"
+      "Get $QVLT on Raydium → stake → earn → vote.\n\nThe quantum era is coming. The question is whether you're in before or after it arrives.\n\nWelcome to QVAULT. ⬡ $QVLT #Solana #QuantumSafe #DeFi 4/4"
     ],
     "scheduledFor": "2026-06-20T12:00:00Z",
     "posted": false

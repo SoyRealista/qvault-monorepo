@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <pattern id="hexbg" x="0" y="0" width="60" height="69" patternUnits="userSpaceOnUse">
+      <polygon points="30,2 58,17 58,47 30,62 2,47 2,17" fill="none" stroke="#1E2A4A" stroke-width="1"/>
+    </pattern>
+    <clipPath id="circle">
+      <circle cx="200" cy="200" r="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="200" cy="200" r="200" fill="#070B18"/>
+  <circle cx="200" cy="200" r="200" fill="url(#hexbg)" clip-path="url(#circle)"/>
+
+  <!-- Outer ring -->
+  <circle cx="200" cy="200" r="192" fill="none" stroke="#1E3A5F" stroke-width="2"/>
+
+  <!-- Hex glyph — outer -->
+  <polygon points="200,60 310,123 310,249 200,312 90,249 90,123"
+           fill="none" stroke="#00D4FF" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Hex glyph — inner fill -->
+  <polygon points="200,90 282,137 282,231 200,278 118,231 118,137"
+           fill="#0A1628" stroke="#7C3AED" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Inner hex shine -->
+  <polygon points="200,100 272,143 272,229 200,272 128,229 128,143"
+           fill="#00D4FF" opacity="0.05"/>
+
+  <!-- Q letter centered -->
+  <text x="200" y="228"
+        font-family="'SF Pro Display','Helvetica Neue',Arial,sans-serif"
+        font-size="130" font-weight="900" fill="#FFFFFF"
+        text-anchor="middle" dominant-baseline="middle">Q</text>
+
+  <!-- Cyan bottom accent line inside hex -->
+  <line x1="140" y1="272" x2="260" y2="272" stroke="#00D4FF" stroke-width="2.5" opacity="0.6"/>
+
+  <!-- VAULT small text below Q -->
+  <text x="200" y="302"
+        font-family="'SF Pro Display','Helvetica Neue',Arial,sans-serif"
+        font-size="24" font-weight="700" fill="#94A3B8"
+        text-anchor="middle" letter-spacing="8">VAULT</text>
+</svg>

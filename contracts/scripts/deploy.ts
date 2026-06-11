@@ -16,10 +16,14 @@
  *   ... npx ts-node scripts/deploy.ts --vesting-only
  *   ... npx ts-node scripts/deploy.ts --dry-run
  *
- * MAINNET SAFETY: against mainnet the script refuses to run unless BOTH
- *   QVAULT_AUDIT_OK=yes   (you confirm a professional audit is complete)
- *   QVAULT_MULTISIG=<pubkey>  (admin will be handed to this Squads multisig)
- * are set. It will also nominate the multisig as pending admin at the end.
+ * MAINNET SAFETY: against mainnet the script refuses to run unless a launch
+ * acknowledgment AND a multisig are set:
+ *   QVAULT_MULTISIG=<pubkey>   (admin will be handed to this Squads multisig)
+ *   and ONE of:
+ *     QVAULT_AUDIT_OK=yes              (a professional audit is complete), or
+ *     QVAULT_UNAUDITED_LAUNCH=acknowledged
+ *                                       (conscious launch without a pro audit)
+ * It will also nominate the multisig as pending admin at the end.
  */
 import * as anchor from "@coral-xyz/anchor";
 import {
@@ -60,15 +64,21 @@ async function main() {
 
   // ── Mainnet safety gate ────────────────────────────────────────────
   if (isMainnet) {
-    const auditOk = process.env.QVAULT_AUDIT_OK === "yes";
-    const multisig = process.env.QVAULT_MULTISIG;
-    if (!auditOk || !multisig) {
+    const auditOk    = process.env.QVAULT_AUDIT_OK === "yes";
+    const unaudited  = process.env.QVAULT_UNAUDITED_LAUNCH === "acknowledged";
+    const multisig   = process.env.QVAULT_MULTISIG;
+    if ((!auditOk && !unaudited) || !multisig) {
       console.error("🛑 MAINNET BLOCKED. Required before mainnet:");
-      console.error("   - Professional audit complete → set QVAULT_AUDIT_OK=yes");
-      console.error("   - Squads multisig pubkey      → set QVAULT_MULTISIG=<pubkey>");
+      console.error("   - Squads multisig pubkey → set QVAULT_MULTISIG=<pubkey>");
+      console.error("   - AND a launch acknowledgment, one of:");
+      console.error("       QVAULT_AUDIT_OK=yes                  (pro audit done), or");
+      console.error("       QVAULT_UNAUDITED_LAUNCH=acknowledged (conscious unaudited launch)");
       process.exit(1);
     }
     try { new PublicKey(multisig); } catch { console.error("🛑 QVAULT_MULTISIG is not a valid pubkey"); process.exit(1); }
+    if (!auditOk && unaudited) {
+      console.log("⚠️  Launching WITHOUT a professional audit (acknowledged). Risk accepted.");
+    }
     console.log("✅ mainnet gates passed; admin will be nominated to multisig:", multisig, "\n");
   }
 

@@ -95,7 +95,7 @@ describe("qvault (devnet integration)", () => {
     const existing = await (program.account as any).vestingSchedule.fetchNullable(vPda);
     if (!existing) {
       await program.methods.createVesting(me, toRaw(1_000), new BN(0), new BN(120)).accountsPartial({
-        admin: me, config, vesting: vPda, systemProgram: SystemProgram.programId,
+        admin: me, config, vesting: vPda, treasuryVault: treasury, systemProgram: SystemProgram.programId,
       }).rpc();
     }
     const v1: any = await (program.account as any).vestingSchedule.fetch(vPda);

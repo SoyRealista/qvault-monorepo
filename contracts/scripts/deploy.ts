@@ -127,7 +127,7 @@ async function main() {
       if (DRY) { console.log("    (dry-run)"); continue; }
       await program.methods.createVesting(
         bene, toRaw(v.amount), new BN(v.cliffMonths * MONTH), new BN(v.durationMonths * MONTH)
-      ).accountsPartial({ admin, config, vesting: vPda, systemProgram: SystemProgram.programId }).rpc();
+      ).accountsPartial({ admin, config, vesting: vPda, treasuryVault: treasury, systemProgram: SystemProgram.programId }).rpc();
       console.log("    ✅ done");
     }
   } else {

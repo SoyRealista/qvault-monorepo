@@ -98,7 +98,7 @@ async function main() {
   if (!existing) {
     console.log("\n[5] create_vesting 5,000 QVLT (cliff 0, duration 60s) for admin");
     await program.methods.createVesting(admin, e9(5_000), new BN(0), new BN(60)).accountsPartial({
-      admin, config, vesting, systemProgram: SystemProgram.programId,
+      admin, config, vesting, treasuryVault: treasury, systemProgram: SystemProgram.programId,
     }).rpc();
     console.log("    ✅ vesting created");
   } else {

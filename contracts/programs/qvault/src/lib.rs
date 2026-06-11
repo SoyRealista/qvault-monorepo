@@ -31,7 +31,7 @@ pub const TOTAL_SUPPLY:      u64 = 1_000_000_000 * 10u64.pow(9); // 1B with 9 de
 pub const TOKEN_DECIMALS:     u8 = 9;
 pub const TOKEN_NAME:       &str = "QVAULT";
 pub const TOKEN_SYMBOL:     &str = "QVLT";
-pub const TOKEN_URI:        &str = "https://qvault.es/metadata/qvlt.json";
+pub const TOKEN_URI:        &str = "https://qvlt.xyz/metadata/qvlt.json";
 
 // Staking tier thresholds (raw token amounts, 9 decimals)
 pub const TIER_ELECTRON:    u64 = 10_000      * 10u64.pow(9);
@@ -56,6 +56,9 @@ pub const FEE_GROWTH:       u16 = 1500;  // 15%
 pub const MIN_VOTE_QUBIT:   u64 = TIER_QUBIT;
 pub const PROPOSAL_DURATION: i64 = 7 * 24 * 3600; // 7 days in seconds
 pub const MAX_PROPOSALS:    usize = 64;
+// Minimum participation for a proposal to pass: total votes cast (for + against)
+// must be at least this fraction of all staked tokens, in basis points.
+pub const QUORUM_BPS:       u64 = 1000; // 10% of total staked
 
 // Governance limits
 pub const MAX_TITLE_LEN:       usize = 128;
@@ -149,6 +152,7 @@ pub mod qvault {
         config.total_burned    = 0;
         config.total_distributed = 0;
         config.proposal_count  = 0;
+        config.reserved_vesting = 0;
         config.bump            = ctx.bumps.config;
 
         // Fee split (can be updated by DAO)
@@ -274,9 +278,10 @@ pub mod qvault {
 
     // ── 3. UNSTAKE ─────────────────────────────────────────────────────────
     /// Unstake tokens after lockup period. Auto-claims pending rewards.
+    /// Deliberately allowed even while paused: principal is the user's own
+    /// property and must never be freezable by an admin pause. Reward payout
+    /// still depends on treasury solvency (carried over if unavailable).
     pub fn unstake(ctx: Context<Unstake>, amount: u64) -> Result<()> {
-        require!(!ctx.accounts.config.paused, QvaultError::Paused);
-
         let stake_acc = &mut ctx.accounts.stake_account;
         let clock      = Clock::get()?;
 
@@ -572,7 +577,7 @@ pub mod qvault {
     pub fn vote(ctx: Context<Vote>, proposal_id: u64, support: bool) -> Result<()> {
         require!(!ctx.accounts.config.paused, QvaultError::Paused);
 
-        let stake_acc = &ctx.accounts.stake_account;
+        let stake_acc = &mut ctx.accounts.stake_account;
         let proposal  = &mut ctx.accounts.proposal;
         let vote_rec  = &mut ctx.accounts.vote_record;
         let clock     = Clock::get()?;
@@ -588,6 +593,11 @@ pub mod qvault {
         require!(!vote_rec.has_voted, QvaultError::AlreadyVoted);
 
         let voting_power = stake_acc.amount;
+
+        // Lock the voter's stake until the proposal closes. This binds voting
+        // power to the lockup so tokens can't be unstaked, moved to another
+        // wallet, and used to vote again within the same window.
+        stake_acc.unlock_at = stake_acc.unlock_at.max(proposal.ends_at);
 
         if support {
             proposal.votes_for = proposal.votes_for
@@ -618,11 +628,12 @@ pub mod qvault {
     // ── 9. EXECUTE PROPOSAL ───────────────────────────────────────────────
     /// After voting period ends, admin executes a passed proposal.
     pub fn execute_proposal(ctx: Context<ExecuteProposal>) -> Result<()> {
+        let config   = &ctx.accounts.config;
         let proposal = &mut ctx.accounts.proposal;
         let clock    = Clock::get()?;
 
         require!(
-            ctx.accounts.admin.key() == ctx.accounts.config.admin,
+            ctx.accounts.admin.key() == config.admin,
             QvaultError::Unauthorized
         );
         require!(
@@ -630,6 +641,19 @@ pub mod qvault {
             QvaultError::VotingOpen
         );
         require!(!proposal.executed, QvaultError::AlreadyExecuted);
+
+        // Quorum: total participation must reach QUORUM_BPS of all staked tokens.
+        let total_votes = proposal.votes_for
+            .checked_add(proposal.votes_against)
+            .ok_or(QvaultError::MathOverflow)?;
+        let quorum_threshold = (config.total_staked as u128)
+            .checked_mul(QUORUM_BPS as u128)
+            .ok_or(QvaultError::MathOverflow)?
+            / 10_000u128;
+        require!(
+            (total_votes as u128) >= quorum_threshold,
+            QvaultError::QuorumNotMet
+        );
         require!(
             proposal.votes_for > proposal.votes_against,
             QvaultError::QuorumNotMet
@@ -727,6 +751,16 @@ pub mod qvault {
             ctx.accounts.treasury_vault.amount >= amount,
             QvaultError::InsufficientTreasury
         );
+        // The treasury also backs active vesting schedules. The admin (even a
+        // multisig) must never be able to withdraw the tokens reserved for
+        // vesting — otherwise "vesting enforced by the contract" would be false.
+        let remaining_after = ctx.accounts.treasury_vault.amount
+            .checked_sub(amount)
+            .ok_or(QvaultError::MathOverflow)?;
+        require!(
+            remaining_after >= ctx.accounts.config.reserved_vesting,
+            QvaultError::InsufficientTreasury
+        );
 
         let bump = ctx.accounts.config.bump;
         let seeds: &[&[u8]] = &[SEED_CONFIG, &[bump]];
@@ -789,6 +823,19 @@ pub mod qvault {
         v.end_ts         = now + duration_seconds;
         v.bump           = ctx.bumps.vesting;
 
+        // Reserve this liability against the treasury so withdraw_treasury can
+        // never pull out the tokens that back an active vesting schedule. This
+        // is what makes the vesting "enforced by the contract" rather than a
+        // promise. Require the treasury actually holds enough to back it.
+        let config = &mut ctx.accounts.config;
+        config.reserved_vesting = config.reserved_vesting
+            .checked_add(total_amount)
+            .ok_or(QvaultError::MathOverflow)?;
+        require!(
+            ctx.accounts.treasury_vault.amount >= config.reserved_vesting,
+            QvaultError::InsufficientTreasury
+        );
+
         emit!(VestingCreated {
             beneficiary,
             total_amount,
@@ -839,6 +886,8 @@ pub mod qvault {
         config.total_distributed = config.total_distributed
             .checked_add(claimable)
             .ok_or(QvaultError::MathOverflow)?;
+        // Release the claimed portion from the reserved liability.
+        config.reserved_vesting = config.reserved_vesting.saturating_sub(claimable);
 
         emit!(VestingClaimed {
             beneficiary: ctx.accounts.beneficiary.key(),
@@ -864,12 +913,14 @@ pub struct Initialize<'info> {
     )]
     pub config: Account<'info, GlobalConfig>,
 
+    // No freeze authority: the mint is created without one, so no admin can
+    // ever freeze a holder's tokens. A credibly-neutral SPL — and one less
+    // rug vector for the community to worry about.
     #[account(
         init,
         payer        = admin,
         mint::decimals   = TOKEN_DECIMALS,
         mint::authority  = config,
-        mint::freeze_authority = config,
     )]
     pub mint: Account<'info, Mint>,
 
@@ -1088,6 +1139,7 @@ pub struct Vote<'info> {
     pub config: Account<'info, GlobalConfig>,
 
     #[account(
+        mut,
         seeds = [SEED_STAKE, voter.key().as_ref()],
         bump  = stake_account.bump,
         constraint = stake_account.owner == voter.key(),
@@ -1182,6 +1234,9 @@ pub struct CreateVesting<'info> {
     )]
     pub vesting: Account<'info, VestingSchedule>,
 
+    #[account(seeds = [SEED_TREASURY, config.mint.as_ref()], bump)]
+    pub treasury_vault: Account<'info, TokenAccount>,
+
     pub system_program: Program<'info, System>,
 }
 
@@ -1236,13 +1291,15 @@ pub struct GlobalConfig {
     pub fee_dao:              u16,     //  2
     pub fee_growth:           u16,     //  2
     pub bump:                 u8,      //  1
+    pub reserved_vesting:     u64,     //  8 — outstanding vesting liability the
+                                       //      treasury must keep backed
     // Padding for future upgrades
-    pub _reserved:            [u8; 64],
+    pub _reserved:            [u8; 56],
 }
 
 impl GlobalConfig {
     pub const LEN: usize =
-        8 + (32 * 7) + 1 + (8 * 5) + (2 * 4) + 1 + 64;
+        8 + (32 * 7) + 1 + (8 * 5) + (2 * 4) + 1 + 8 + 56;
 }
 
 #[account]
@@ -1379,11 +1436,13 @@ pub fn vested_amount(v: &VestingSchedule, now: i64) -> Result<u64> {
     u64::try_from(vested).map_err(|_| error!(QvaultError::MathOverflow))
 }
 
-/// Apply basis points to an amount
+/// Apply basis points to an amount. Computed in u128 so large distributions
+/// (a single distribute_fees of more than ~4.6M tokens) can't overflow u64
+/// mid-multiplication and revert the transaction.
 pub fn bps(amount: u64, basis_points: u16) -> Result<u64> {
-    amount
-        .checked_mul(basis_points as u64)
+    let result = (amount as u128)
+        .checked_mul(basis_points as u128)
         .ok_or_else(|| error!(QvaultError::MathOverflow))?
-        .checked_div(10_000)
-        .ok_or_else(|| error!(QvaultError::MathOverflow))
+        / 10_000u128;
+    u64::try_from(result).map_err(|_| error!(QvaultError::MathOverflow))
 }

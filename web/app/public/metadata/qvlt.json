@@ -1,0 +1,20 @@
+{
+  "name": "QVAULT",
+  "symbol": "QVLT",
+  "description": "QVAULT ($QVLT) is a community-first protocol on Solana building finance for the post-quantum era. It combines a quantum-safe security thesis, real DeFi utility (staking, fee-sharing, buyback-and-burn) and on-chain DAO governance, with a long-term roadmap to a proprietary post-quantum Layer 1 using CRYSTALS-Dilithium signatures.",
+  "image": "https://qvlt.xyz/qvlt-logo.png",
+  "external_url": "https://qvlt.xyz",
+  "decimals": 9,
+  "tags": ["defi", "staking", "governance", "quantum", "post-quantum", "community"],
+  "properties": {
+    "category": "image",
+    "files": [
+      { "uri": "https://qvlt.xyz/qvlt-logo.png", "type": "image/png" },
+      { "uri": "https://qvlt.xyz/qvlt-logo.svg", "type": "image/svg+xml" }
+    ]
+  },
+  "extensions": {
+    "website": "https://qvlt.xyz",
+    "twitter": "https://x.com/TheQVault"
+  }
+}

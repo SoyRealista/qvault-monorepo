@@ -64,7 +64,9 @@
     "id": "edu-shor",
     "text": "Quantum 101: Shor's algorithm lets a big enough quantum computer reverse the math that turns your private key into a public one. That's the whole threat to ECDSA in a nutshell. Post-quantum crypto fixes it. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #PostQuantum",
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-15T22:36:39.395Z",
+    "tweetId": "2066651124606935446"
   },
   {
     "id": "edu-pubkey-thread",

@@ -76,7 +76,9 @@
       "The fix isn't panic, it's migration: post-quantum signatures (e.g. NIST's CRYSTALS-Dilithium). That's the foundation of QVAULT's phase-3 L1. Start preparing before you have to. ⬡ $QVLT #PostQuantum #Solana 3/3"
     ],
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-16T22:32:12.424Z",
+    "tweetId": "2067012390860861609"
   },
   {
     "id": "product-governance",

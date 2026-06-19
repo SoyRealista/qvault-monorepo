@@ -100,7 +100,9 @@
     "id": "transparency-devnet",
     "text": "Building in public: the QVAULT contract is live on Solana devnet — staking, fee split, buyback/burn, governance and vesting all working end-to-end. Mainnet comes after a pro audit. ⬡ $QVLT\n\n#Solana #BuildInPublic #DeFi",
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-19T20:26:11.202Z",
+    "tweetId": "2068067842147471863"
   },
   {
     "id": "transparency-roadmap",

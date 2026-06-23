@@ -132,7 +132,9 @@
     "id": "community-meme",
     "text": "them: \"quantum computers breaking crypto is decades away\"\nthe research papers: *cutting the estimate again*\nus: building quantum-safe finance now ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Crypto",
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-23T21:18:27.050Z",
+    "tweetId": "2069530546082845130"
   },
   {
     "id": "news-jack-template",

@@ -140,7 +140,9 @@
     "id": "news-jack-template",
     "text": "Today's headline: <quantum/crypto-security news in one line>. This is exactly why QVAULT exists — we're not waiting for the break, we're building quantum-safe finance now. ⬡ $QVLT\n\n#QuantumComputing #Bitcoin #Crypto",
     "scheduledFor": null,
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-24T21:11:03.436Z",
+    "tweetId": "2069891073493594130"
   },
   {
     "id": "es-intro",

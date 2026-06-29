@@ -179,54 +179,54 @@
   {
     "id": "launch-d9-mission",
     "thread": [
-      "9 days until QVAULT Genesis Launch. Let us tell you exactly what we're building — and why it can't wait. 🧵 #QuantumComputing #Solana #DeFi 1/4",
+      "8 days until QVAULT Genesis Launch. Let us tell you exactly what we're building — and why it can't wait. 🧵 #QuantumComputing #Solana #DeFi 1/4",
       "Classical crypto (Bitcoin, Ethereum, Solana) uses ECDSA/Ed25519 signatures. A sufficiently large quantum computer running Shor's algorithm could derive private keys from public ones. Your funds. Gone. 2/4",
       "QVAULT Phase 1: a community and DeFi protocol on Solana — staking, fee-sharing, buyback & burn, DAO governance. Real utility. Real ownership. Building the people who will build the future. 3/4",
-      "Phase 3 (2027-28): a post-quantum Layer 1 using CRYSTALS-Dilithium signatures. The blockchain that survives what's coming. The mission starts in 9 days. ⬡ $QVLT #PostQuantum #Solana 4/4"
+      "Phase 3 (2027-28): a post-quantum Layer 1 using CRYSTALS-Dilithium signatures. The blockchain that survives what's coming. The mission starts in 8 days. ⬡ $QVLT #PostQuantum #Solana 4/4"
     ],
-    "scheduledFor": "2026-06-11T13:00:00Z",
+    "scheduledFor": "2026-06-29T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d8-solana",
-    "text": "Why Solana? Sub-cent fees. 400ms blocks. A community that moves fast.\n\nYou can't build a quantum-safe financial movement on a chain that costs $30/tx. ⬡ $QVLT\n\n8 days.\n\n#Solana #SOL #DeFi",
-    "scheduledFor": "2026-06-12T13:00:00Z",
+    "text": "Why Solana? Sub-cent fees. 400ms blocks. A community that moves fast.\n\nYou can't build a quantum-safe financial movement on a chain that costs $30/tx. ⬡ $QVLT\n\n7 days.\n\n#Solana #SOL #DeFi",
+    "scheduledFor": "2026-06-30T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d7-week",
-    "text": "One week.\n\nOne week until $QVLT genesis. One week until the quantum-safe financial movement has a home on-chain.\n\nStaking. Fee-sharing. DAO governance. Buyback & burn.\n\nAll live. All on Solana. All yours. ⬡\n\n#Solana #DeFi #QuantumSafe",
-    "scheduledFor": "2026-06-13T13:00:00Z",
+    "text": "6 days.\n\n6 days until $QVLT genesis — until the quantum-safe financial movement has a home on-chain.\n\nStaking. Fee-sharing. DAO governance. Buyback & burn.\n\nAll live. All on Solana. All yours. ⬡\n\n#Solana #DeFi #QuantumSafe",
+    "scheduledFor": "2026-07-01T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d6-tiers",
-    "text": "QVAULT staking tiers — launching in 6 days:\n\n⚡ Electron — 10k $QVLT → rewards\n🔆 Photon — 50k $QVLT → rewards + governance\n🧊 Qubit — 250k $QVLT → DAO council seat\n\nThe earlier you stake, the higher the share. ⬡\n\n#Solana #DeFi #Staking",
-    "scheduledFor": "2026-06-14T13:00:00Z",
+    "text": "QVAULT staking tiers — launching in 5 days:\n\n⚡ Electron — 10k $QVLT → rewards\n🔆 Photon — 50k $QVLT → rewards + governance\n🧊 Qubit — 250k $QVLT → DAO council seat\n\nThe earlier you stake, the higher the share. ⬡\n\n#Solana #DeFi #Staking",
+    "scheduledFor": "2026-07-02T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d5-fees",
-    "text": "Every swap, every stake, every protocol action — the fees work for you:\n\n40% → stakers 💸\n20% → buyback & burn 🔥\n25% → DAO treasury 🏛\n15% → growth fund 🚀\n\nUsage goes up → supply pressure goes up → you benefit. $QVLT ⬡\n\n5 days. #DeFi #Solana #Tokenomics",
-    "scheduledFor": "2026-06-15T13:00:00Z",
+    "text": "Every swap, every stake, every protocol action — the fees work for you:\n\n40% → stakers 💸\n20% → buyback & burn 🔥\n25% → DAO treasury 🏛\n15% → growth fund 🚀\n\nUsage goes up → supply pressure goes up → you benefit. $QVLT ⬡\n\n4 days. #DeFi #Solana #Tokenomics",
+    "scheduledFor": "2026-07-03T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d4-transparent",
-    "text": "We build in public.\n\n✅ Smart contract on Solana devnet — tested end-to-end\n✅ Code on GitHub (open)\n✅ Team vesting on-chain — enforced by the contract, not promises\n✅ No VC allocation, no hidden wallets\n\n4 days until mainnet. ⬡ $QVLT\n\n#Solana #BuildInPublic #DeFi",
-    "scheduledFor": "2026-06-16T13:00:00Z",
+    "text": "We build in public.\n\n✅ Smart contract on Solana devnet — tested end-to-end\n✅ Code on GitHub (open)\n✅ Team vesting on-chain — enforced by the contract, not promises\n✅ No VC allocation, no hidden wallets\n\n3 days until mainnet. ⬡ $QVLT\n\n#Solana #BuildInPublic #DeFi",
+    "scheduledFor": "2026-07-04T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d3-quantum-news",
-    "text": "The quantum threat to crypto isn't hypothetical. It's a countdown.\n\nNIST finalised its first post-quantum standards in 2024. Governments are mandating migration. The crypto world is still ignoring it.\n\nNot us. 3 days. ⬡ $QVLT\n\n#QuantumComputing #PostQuantum #Bitcoin",
-    "scheduledFor": "2026-06-17T13:00:00Z",
+    "text": "The quantum threat to crypto isn't hypothetical. It's a countdown.\n\nNIST finalised its first post-quantum standards in 2024. Governments are mandating migration. The crypto world is still ignoring it.\n\nNot us. 2 days. ⬡ $QVLT\n\n#QuantumComputing #PostQuantum #Bitcoin",
+    "scheduledFor": "2026-07-05T13:00:00Z",
     "posted": false
   },
   {
     "id": "launch-d2-tomorrow",
     "text": "Tomorrow.\n\nThe financial infrastructure for the quantum era launches tomorrow.\n\n$QVLT goes live on Solana mainnet. Staking opens. The DAO begins.\n\nIf you believe the future is quantum-safe — this is your moment. ⬡\n\n#Solana #DeFi #QuantumComputing",
-    "scheduledFor": "2026-06-19T13:00:00Z",
+    "scheduledFor": "2026-07-06T13:00:00Z",
     "posted": false
   },
   {
@@ -237,7 +237,7 @@
       "This is Phase 1. The foundation.\n\nPhase 2: security tooling + exchange listings\nPhase 3: post-quantum Layer 1 (CRYSTALS-Dilithium)\n\nWe're not selling a finished product. We're starting a movement. 3/4",
       "Get $QVLT on Raydium → stake → earn → vote.\n\nThe quantum era is coming. The question is whether you're in before or after it arrives.\n\nWelcome to QVAULT. ⬡ $QVLT #Solana #QuantumSafe #DeFi 4/4"
     ],
-    "scheduledFor": "2026-06-20T12:00:00Z",
+    "scheduledFor": "2026-07-07T12:00:00Z",
     "posted": false
   }
 ]

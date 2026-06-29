@@ -18,7 +18,7 @@ import idl from "./idl/qvault.json";
 const PROGRAM_ID = new PublicKey((idl as any).address);
 const TIERS = ["Electron", "Photon", "Qubit"];
 const DEC = 1_000_000_000n;
-const LAUNCH_DATE = new Date("2026-06-20T12:00:00Z"); // noon UTC = 14:00 Madrid
+const LAUNCH_DATE = new Date("2026-07-07T12:00:00Z"); // noon UTC = 14:00 Madrid
 
 const toRaw = (qvlt: string) =>
   new BN((BigInt(Math.max(0, Math.floor(Number(qvlt) || 0))) * DEC).toString());
@@ -83,7 +83,7 @@ function HeroSection({ onEnterApp }: { onEnterApp: () => void }) {
         </p>
 
         <div className="launch-label">
-          {t.done ? "🚀 LIVE NOW" : "Genesis Launch — 20 June 2026"}
+          {t.done ? "🚀 LIVE NOW" : "Genesis Launch — 7 July 2026"}
         </div>
 
         {!t.done && (
@@ -137,7 +137,7 @@ function MissionSection() {
             <h3>Phase 1 — Community</h3>
             <p>A global movement of holders, stakers, and believers in quantum-safe finance.
               Fee-sharing, governance, and buyback &amp; burn — live on Solana for near-zero fees.</p>
-            <span className="phase-badge current">Now → Jun 2026</span>
+            <span className="phase-badge current">Now → Jul 2026</span>
           </div>
           <div className="pillar">
             <div className="pillar-icon">🛡️</div>
@@ -219,7 +219,7 @@ function TokenomicsSection() {
 
 function RoadmapSection() {
   const steps = [
-    { date: "Jun 2026", label: "Genesis Launch", desc: "Token on Solana mainnet. Staking, fee-sharing, buyback & burn and DAO governance all live.", done: false, active: true },
+    { date: "Jul 2026", label: "Genesis Launch", desc: "Token on Solana mainnet. Staking, fee-sharing, buyback & burn and DAO governance all live.", done: false, active: true },
     { date: "Q3 2026", label: "Exchange listings", desc: "CEX listings on tier-2 exchanges. Raydium pool live. Security audit published.", done: false, active: false },
     { date: "Q4 2026", label: "QVAULT Academy", desc: "Free post-quantum education platform. Grow the most informed crypto community.", done: false, active: false },
     { date: "2027", label: "Post-Quantum Bridge", desc: "Cross-chain bridge with PQC signature verification. First quantum-resistant DeFi primitive.", done: false, active: false },

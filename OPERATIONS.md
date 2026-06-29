@@ -77,7 +77,7 @@ seguridad del 11-jun).
 
 ---
 
-## 5. Secuencia del día del lanzamiento (20 jun)
+## 5. Secuencia del día del lanzamiento (7 jul 2026)
 
 1. `anchor build` + `anchor deploy --provider.cluster mainnet` (cuesta ~3-7 SOL).
 2. Publicar IDL on-chain.

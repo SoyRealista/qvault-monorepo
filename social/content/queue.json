@@ -185,7 +185,9 @@
       "Phase 3 (2027-28): a post-quantum Layer 1 using CRYSTALS-Dilithium signatures. The blockchain that survives what's coming. The mission starts in 8 days. ⬡ $QVLT #PostQuantum #Solana 4/4"
     ],
     "scheduledFor": "2026-06-29T13:00:00Z",
-    "posted": false
+    "posted": true,
+    "postedAt": "2026-06-29T21:10:03.343Z",
+    "tweetId": "2071702757422297431"
   },
   {
     "id": "launch-d8-solana",

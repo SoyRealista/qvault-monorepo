@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "QVAULT Wallet",
+    "slug": "qvault-wallet",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "qvault",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#070B18"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "xyz.qvlt.wallet",
+      "infoPlist": {
+        "NSCameraUsageDescription": "QVAULT uses the camera to scan wallet QR codes when sending tokens.",
+        "LSApplicationQueriesSchemes": ["phantom", "https"]
+      }
+    },
+    "android": {
+      "package": "xyz.qvlt.wallet",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#070B18"
+      },
+      "permissions": ["CAMERA"]
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/icon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "QVAULT uses the camera to scan wallet QR codes."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "REPLACE_AFTER_eas_init"
+      }
+    }
+  }
+}

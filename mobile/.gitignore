@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+dist/
+web-build/
+*.log
+.DS_Store
+# Native build output
+ios/
+android/
+# EAS
+.easignore
